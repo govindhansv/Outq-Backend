@@ -1,0 +1,3 @@
+MONGO_URL='mongodb+srv://govi:govi@cluster0.qmc6cnq.mongodb.net/?retryWrites=true&w=majority'
+PORT=3001
+JWT_SECERT="Somesecertjwt"
