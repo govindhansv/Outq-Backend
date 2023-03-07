@@ -4,6 +4,7 @@ import Store from "../models/Store.js";
 import User from "../models/User.js";
 import TimeSlot from "../models/TimeSlot.js"
 import Service from "../models/Service.js"
+import Owner from "../models/Owner.js"
 import Noti from "../models/Noti.js"
 import {sendNoty} from "../controllers/notification.js";
 
@@ -144,6 +145,15 @@ console.log("store \n\n\n",store);
                     storeid: storeid
                 });
                 const noti = await newNoti.save();
+                // let owner = await Owner.findOne({ _id: store.id });
+                // console.log(owner);
+                
+                // let data = {
+                //     token:owner.deviceid,
+                //     title: "New Booking Arrived",
+                //     body: `${user.name} is booked ${servicename} at ${start} on ${date} `
+                // }
+                // sendNoty(data);
 
             }
         })

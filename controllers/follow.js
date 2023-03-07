@@ -90,11 +90,12 @@ export const checkfollow = async (req, res) => {
         const store = await Store.findById(storeid);
 
         const isFollowed = store.followerslist.includes(userid);
+        const length = store.followerslist.length;
         console.log("status of folloe", isFollowed);
         if (isFollowed) {
-            res.status(201).json({ followed: true });
+            res.status(201).json({ followed: true,length:length });
         } else {
-            res.status(201).json({ followed: false });
+            res.status(201).json({ followed: false,length:length });
         }
 
     } catch (err) {
