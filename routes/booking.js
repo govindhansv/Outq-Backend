@@ -3,8 +3,8 @@ import {booking,viewall,storebooking,viewsingle,cancelbooking, getTimeSlots,book
 
 const router = express.Router();
 
-router.post("/", booking);
-router.post("/book", book);
+router.post("/", book);
+router.post("/book", booking);
 router.get("/viewall/:userid", viewall);
 router.get("/view/store/:storeid/", storebooking);
 router.get("/view/single/:id", viewsingle);

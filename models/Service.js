@@ -22,7 +22,7 @@ const ServiceSchema = new mongoose.Schema(
     },
     img: {
       type: String,
-      required: true,
+      default:"https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
     },
     storeid: {
       type: String,

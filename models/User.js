@@ -46,6 +46,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default:" "
     },
+    deviceid: {
+      type: String,
+      default:" "
+    },
     // picturePath: {
     //   type: String,
     //   default: "",

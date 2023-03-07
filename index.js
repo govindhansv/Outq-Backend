@@ -16,6 +16,7 @@ import bookingRoutes from "./routes/booking.js";
 import followRoutes from "./routes/follow.js";
 import orderRoutes from "./routes/order.js";
 import dashboardRoutes from "./routes/dashboard.js";
+import notificationRoutes from "./routes/notification.js";
 // import paymentRoutes from "./routes/payment.js";
 // import historyRoutes from "./routes/history.js";
 import testRoutes from "./routes/test.js";
@@ -79,6 +80,7 @@ app.use("/booking", bookingRoutes);
 app.use("/follow", followRoutes);
 app.use("/order", orderRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/notification", notificationRoutes);
 // app.use("/payment", paymentRoutes);
 // app.use("/history", testRoutes);
 

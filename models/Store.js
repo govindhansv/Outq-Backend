@@ -44,6 +44,7 @@ const StoreSchema = new mongoose.Schema(
     },
     img: {
       type: String,
+      default:"https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
     },
     followers: {
       type: Map,

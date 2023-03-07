@@ -7,7 +7,7 @@ import Owner from "../models/Owner.js";
 export const register = async (req, res) => {
     try {
         // // console.log(req.body);
-        const {
+        let {
             name,
             location,
             id,
@@ -21,7 +21,9 @@ export const register = async (req, res) => {
             latitude,
             pincode
         } = req.body;
-
+        if (img ==""){
+            img = "https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
+        }
         // const owner = await Owner.findById(ownerId);
         // const owner = await Owner.findOne({ firstName: ownerId });
         const newStore = new Store({

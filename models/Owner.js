@@ -18,6 +18,10 @@ const OwnerSchema = new mongoose.Schema(
       required: true,
       min: 5,
     },
+    deviceid: {
+      type: String,
+      default:""
+    },
   },
 );
 // OwnerSchema.inde

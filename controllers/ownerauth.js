@@ -19,6 +19,7 @@ export const register = async (req, res) => {
       name,
       email,
       pswd,
+      deviceid
     } = req.body;
     // // console.log(req.body);
     const salt = await bcrypt.genSalt();
@@ -28,6 +29,8 @@ export const register = async (req, res) => {
       name,
       email,
       password: passwordHash,
+      deviceid
+
     });
     
     const savedOwner = await newOwner.save();

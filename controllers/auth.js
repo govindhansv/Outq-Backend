@@ -17,6 +17,7 @@ export const register = async (req, res) => {
       phone,
       location,
       pincode,
+      deviceid
     } = req.body;
 
     // console.log(req.body);
@@ -35,6 +36,7 @@ export const register = async (req, res) => {
       phone,
       location,
       pincode,
+      deviceid
       // viewedProfile: Math.floor(Math.random() * 10000),
       // impressions: Math.floor(Math.random() * 10000),
     });

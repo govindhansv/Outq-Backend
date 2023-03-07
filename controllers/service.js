@@ -1,15 +1,16 @@
 import Store from "../models/Store.js";
 import Service from "../models/Service.js"
 import User from "../models/User.js"
+import Noti from "../models/Noti.js"
 
 // SERVICES CRUD
 
 // REG SERVICES
 export const addService = async (req, res) => {
-    // console.log('called');
+    console.log('called');
     try {
 
-        const {
+        let {
             name,
             description,
             price,
@@ -21,8 +22,12 @@ export const addService = async (req, res) => {
 
         } = req.body;
 
+        if (img == "") {
+            img = "https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
+        }
         // console.log(req.body);
-        const store = await Store.findOne({ storeid })
+
+        const store = await Store.findOne({ _id: storeid })
 
         const newService = new Service({
             name,
@@ -39,15 +44,32 @@ export const addService = async (req, res) => {
             longitude: store.longitude,
             latitude: store.latitude,
             pincode: store.pincode,
-            distance:""
+            distance: ""
         });
 
         const service = await newService.save();
+        console.log(store);
+        let array = store.followerslist;
+        console.log(" array", array);
+
+        for (let i = 0; i < array.length; i++) {
+            console.log(array[i]);
+            let user = await User.findOne({ _id: array[i] });
+            console.log(user);
+            const newNoti = new Noti({
+                title: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
+                message: `Service Updated`,
+                userid: user._id
+            });
+            const noti = await newNoti.save();
+            console.log(noti);
+        }
+
         // console.log(" serv", service);
 
         res.status(201).json({ success: true });
     } catch (err) {
-        // console.log("err", err);
+        console.log("err", err);
         res.status(409).json({ error: err.message });
     }
 };
@@ -114,7 +136,7 @@ export const updateService = async (req, res) => {
     // console.log(' called ');
     // console.log(" er bo", req.body, req.params.id);
     try {
-
+console.log(req.body);
         Service.findByIdAndUpdate(req.params.id,
             { $set: req.body },
             function (err, data) {
@@ -126,6 +148,25 @@ export const updateService = async (req, res) => {
                 }
             });
         
+        const store = await Store.findOne({ _id: req.body.storeid })
+
+        let array = store.followerslist;
+        console.log(" array", array);
+
+        for (let i = 0; i < array.length; i++) {
+            console.log(array[i]);
+            let user = await User.findOne({ _id: array[i] });
+            console.log(user);
+            
+            const newNoti = new Noti({
+                title: `${store.name} is updated their ${req.body.name} service price from ${req.body.ogprice}  to ${req.body.price} `,
+                message: `Service Updated`,
+                userid: user._id
+            });
+
+            const noti = await newNoti.save();
+            console.log(noti);
+        }
     } catch (err) {
         // console.log(err);
         res.status(404).json({ message: err.message });
@@ -162,10 +203,10 @@ export const delService = async (req, res) => {
 export const searchServices = async (req, res) => {
     // console.log(' called ');
     try {
-        let userid = req.params.userid; 
+        let userid = req.params.userid;
         let user = await User.findOne({ userid })
-        const userLat =  parseFloat(user.latitude);
-        const userLng =  parseFloat(user.longitude);
+        const userLat = parseFloat(user.latitude);
+        const userLng = parseFloat(user.longitude);
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
             const R = 6371; // Radius of the earth in km
@@ -185,7 +226,7 @@ export const searchServices = async (req, res) => {
                     return distance.toFixed(2) + ' km';
                 }
             }
-             d = formatDistance(d);
+            d = formatDistance(d);
             return d;
         }
 

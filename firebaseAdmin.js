@@ -1,11 +1,22 @@
+import { initializeApp, credential as _credential, messaging } from 'firebase-admin';
+import serviceAccount from './outqapp-firebase-adminsdk-1qymi-dbe3270576.json';
 
-// import { initializeApp, credential as _credential } from "firebase-admin";
+initializeApp({
+    credential: _credential.cert(serviceAccount),
+});
 
-// import serviceAccount from "./outq-2b5af-firebase-adminsdk-xgart-9ae70eeb27.json?type=json";
+const message = {
+    notification: {
+        title: 'Notification title',
+        body: 'Notification body',
+    },
+    token: 'FCM registration token',
+};
 
-// initializeApp({
-//     credential: _credential.cert(serviceAccount)
-// });
-
-// firebase-adminsdk-xgart@outq-2b5af.iam.gserviceaccount.com
-
+messaging().send(message)
+    .then((response) => {
+        console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+        console.error('Error sending message:', error);
+    });
