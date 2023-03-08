@@ -63,6 +63,17 @@ export const addService = async (req, res) => {
             });
             const noti = await newNoti.save();
             console.log(noti);
+
+        
+            console.log(user._id);
+            
+            let data = {
+                token:user.deviceid,
+                title: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
+                body: `Service Updated`
+            }
+            sendNoty(data);
+
         }
 
         // console.log(" serv", service);
@@ -166,6 +177,13 @@ console.log(req.body);
 
             const noti = await newNoti.save();
             console.log(noti);
+            let data = {
+                token:user.deviceid,
+                title: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
+                body: `Service Updated`
+            }
+            sendNoty(data);
+
         }
     } catch (err) {
         // console.log(err);
