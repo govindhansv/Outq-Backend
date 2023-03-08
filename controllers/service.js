@@ -70,8 +70,8 @@ export const addService = async (req, res) => {
             
             let data = {
                 token:user.deviceid,
-                title: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
-                body: `Service Updated`
+                title: `Service Updated`,
+                body: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
             }
             sendNoty(data);
 
@@ -151,41 +151,42 @@ export const updateService = async (req, res) => {
 console.log(req.body);
         Service.findByIdAndUpdate(req.params.id,
             { $set: req.body },
-            function (err, data) {
+            async function (err, data) {
                 if (err) {
                     res.status(200).json({ status: false, err: err });
                 }
                 else {
+                    const store = await Store.findOne({ _id: req.body.storeid })
+
+                    let array = store.followerslist;
+                    console.log(" array", array);
+            
+                    for (let i = 0; i < array.length; i++) {
+                        console.log(array[i]);
+                        let user = await User.findOne({ _id: array[i] });
+                        console.log(user);
+                        
+                        const newNoti = new Noti({
+                            title: `${store.name} is updated their ${req.body.name} service price from ${req.body.ogprice}  to ${req.body.price} `,
+                            message: `Service Updated`,
+                            userid: user._id
+                        });
+            
+                        const noti = await newNoti.save();
+                        console.log(noti);
+                        let data = {
+                            token:user.deviceid,
+                            title: `Service Updated`,
+                            body: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
+                        }
+                        sendNoty(data);
+            
+                    }
                     res.status(200).json({ status: true, data: data });
                 }
             });
         
-        const store = await Store.findOne({ _id: req.body.storeid })
-
-        let array = store.followerslist;
-        console.log(" array", array);
-
-        for (let i = 0; i < array.length; i++) {
-            console.log(array[i]);
-            let user = await User.findOne({ _id: array[i] });
-            console.log(user);
-            
-            const newNoti = new Noti({
-                title: `${store.name} is updated their ${req.body.name} service price from ${req.body.ogprice}  to ${req.body.price} `,
-                message: `Service Updated`,
-                userid: user._id
-            });
-
-            const noti = await newNoti.save();
-            console.log(noti);
-            let data = {
-                token:user.deviceid,
-                title: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
-                body: `Service Updated`
-            }
-            sendNoty(data);
-
-        }
+       
     } catch (err) {
         // console.log(err);
         res.status(404).json({ message: err.message });

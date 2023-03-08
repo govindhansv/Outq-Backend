@@ -150,8 +150,8 @@ console.log("store \n\n\n",store);
                 
                 let data = {
                     token:owner.deviceid,
-                    title: "New Booking Arrived",
-                    body: `${user.name} is booked ${servicename} at ${start} on ${date} `
+                    title: `${user.name} is booked ${servicename} at ${start} on ${date} `,
+                    body: "New Booking Arrived",
                 }
                 sendNoty(data);
 
