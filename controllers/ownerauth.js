@@ -21,7 +21,7 @@ export const register = async (req, res) => {
       pswd,
       deviceid
     } = req.body;
-    // // console.log(req.body);
+    // // // console.log(req.body);
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(pswd, salt);
 
@@ -35,17 +35,17 @@ export const register = async (req, res) => {
     
     const savedOwner = await newOwner.save();
     let ownerid = savedOwner._id.toString();
-    // console.log(ownerid);
+    // // console.log(ownerid);
     res.status(201).json([{"id":ownerid}]);
   } catch (err) {
-    // console.log(err);
+    // // console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
 
 /* LOGGING IN */
 export const login = async (req, res) => {
-  // console.log('called');
+  // // console.log('called');
 
   try {
     const { email, pswd } = req.body;
@@ -58,12 +58,12 @@ export const login = async (req, res) => {
     let ownerid = owner._id.toString();
     const store = await Store.findOne({ id: ownerid });
     let storeid = store._id.toString();
-    // console.log(ownerid);
-    // console.log(store);
+    // // console.log(ownerid);
+    // // console.log(store);
     res.status(201).json([{"id":ownerid,"storeid":storeid}]);
     // res.status(200).json({ token, owner });
   } catch (err) {
-    // console.log(err);
+    // // console.log(err);
     res.status(500).json({ err: "error true", error: err.message });
   }
 };

@@ -11,13 +11,13 @@ Store.updateOne({ _id: storeid }, update, (err, result) => {
     if (err) {
         console.error(err);
     } else {
-        console.log(`Added ${timearray.length} new values `);
+        // console.log(`Added ${timearray.length} new values `);
     }
 });
 /* Create new booking order */
 
 export const book = async (req, res) => {
-    console.log('called');
+    // console.log('called');
     try {
         let {
             start,
@@ -36,7 +36,7 @@ export const book = async (req, res) => {
         let store = await Store.findOne({ storeid });
         let endtime = addMinutesToTimeString(start, service.duration);
         let user = await User.findOne({ userid });
-        console.log(" endtime", endtime);
+        // console.log(" endtime", endtime);
 
         end = endtime;
 
@@ -56,11 +56,11 @@ export const book = async (req, res) => {
             }
         });
 
-        console.log(" count is qual to ", count);
+        // console.log(" count is qual to ", count);
         const s = await Store.find({ storeid: storeid });
 
         let employeecount = parseInt(store.employees);
-        console.log("fgd", employeecount);
+        // console.log("fgd", employeecount);
 
         if (employeecount < count ) {
             err = true;
@@ -68,21 +68,21 @@ export const book = async (req, res) => {
 
 
         if (err) {
-            console.log(' Already booked');
+            // console.log(' Already booked');
             res.status(500).json({ "success": false });
         } else {
 
             const time = await Store.find({ storeid: storeid });
 
-            console.log("timebhgfb gfnbgfhbf ghcf", time);
-            console.log("timebhgfb gfnbgfhbf ghcf", time[0].bookedtimes);
+            // console.log("timebhgfb gfnbgfhbf ghcf", time);
+            // console.log("timebhgfb gfnbgfhbf ghcf", time[0].bookedtimes);
             let timecount = 0;
             let duptimes = time[0].bookedtimes
-            console.log("d", time[0].bookedtimes.length);
+            // console.log("d", time[0].bookedtimes.length);
 
-            console.log("emp", store.employees);
+            // console.log("emp", store.employees);
             let employeecount = parseInt(store.employees);
-            console.log("fgd", employeecount);
+            // console.log("fgd", employeecount);
 
 
             duptimes.forEach(element => {
@@ -122,7 +122,7 @@ export const book = async (req, res) => {
                 const savedTimeSlot = await newTimeSlot.save();
                 res.status(201).json({ "success": true });
             } else {
-                console.log(' Already booked');
+                // console.log(' Already booked');
                 res.status(500).json({ "success": false });
             }
         }
@@ -140,12 +140,12 @@ export const book = async (req, res) => {
             if (err) {
                 console.error(err);
             } else {
-                console.log(`Added ${timearray.length} new values `);
+                // console.log(`Added ${timearray.length} new values `);
             }
         });
 
     } catch (err) {
-        console.log("err", err);
+        // console.log("err", err);
         res.status(500).json({ error: true });
     }
 };

@@ -9,53 +9,53 @@ import TimeSlot from "../models/TimeSlot.js"
 import Service from "../models/Service.js"
 
 export const viewall = async (req, res) => {
-    // console.log('called');
+    // // console.log('called');
     try {
         const { userid } = req.params;
         const orders = await Order.find({ "userid": userid }).select('-createdAt').select('-__v').select('-updatedAt');
         orders.forEach(element => {
-            // // console.log(element);
+            // // // console.log(element);
             element.orderid = element._id;
         });
         res.status(201).json(bookings);
     } catch (err) {
-        // console.log("err", err);
+        // // console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const storeorders = async (req, res) => {
-    // console.log('called');
+    // // console.log('called');
     try {
         const { storeid } = req.params;
         const orders = await Order.find({ "storeid": storeid }).select('-createdAt').select('-__v').select('-updatedAt');
         orders.forEach(element => {
-            // // console.log(element);
+            // // // console.log(element);
             element.orderid = element._id;
         });
-        // console.log(orders);
+        // // console.log(orders);
         res.status(201).json(orders);
     } catch (err) {
-        // console.log("err", err);
+        // // console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const viewsingle = async (req, res) => {
-    // console.log('called');
+    // // console.log('called');
     try {
         const { id } = req.params;
         const order = await Order.find({ id }).select('-createdAt').select('-__v').select('-updatedAt');
         res.status(201).json(order);
     } catch (err) {
-        // console.log("err", err);
+        // // console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 
 export const done = async (req, res) => {
-    console.log('Done');
+    // console.log('Done');
     try {
         const { id } = req.params;
 
@@ -85,8 +85,8 @@ export const done = async (req, res) => {
 
         let timeslots1 = await TimeSlot.find({ storeid: obj.storeid, date: obj.date }).select('times').select('date');
         let timeslots = timeslots1[0].times;
-        console.log("firstdate", timeslots1);
-        console.log("firstdateid", timeslots1[0]._id);
+        // console.log("firstdate", timeslots1);
+        // console.log("firstdateid", timeslots1[0]._id);
 
         let array = [];
 
@@ -99,8 +99,8 @@ export const done = async (req, res) => {
                 array.push(start);
             }
     
-            console.log(array);
-            console.log('nots cal');
+            // console.log(array);
+            // console.log('nots cal');
             array.forEach(ele => {
                 timeslots.forEach(e => {
                     if (e.time == ele) {
@@ -124,14 +124,14 @@ export const done = async (req, res) => {
             }
         ).then(async (data, err) => {
             if (err) {
-                console.log(err);
+                // console.log(err);
             } else {
-                console.log(data);
+                // console.log(data);
             }
         })
         res.status(201).json({ success:true });
     } catch (err) {
-        console.log("Done err", err);
+        // console.log("Done err", err);
         res.status(500).json({ error: err.message });
     }
 };

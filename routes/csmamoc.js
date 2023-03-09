@@ -3,8 +3,8 @@ import express from "express";
 const router = express.Router();
 
 router.get('/dbms', (req,res) =>{
-    let data = [{ title: " sdf", link: " sdf" }, { title: " sdf", link: " sdf" }, { title: " sdf", link: " sdf" }];
-    console.log(data);
+    let data = [{ title: " heck", link: "https://e4a3-103-154-54-137.in.ngrok.io/store/store/get" }, { title: " sdf", link: " sdf" }, { title: " sdf", link: " sdf" }];
+    // console.log(data);
     res.json(data);
 });
 
@@ -28,6 +28,7 @@ router.get('/java', (req,res) =>{
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
+
 router.get('/c', (req,res) =>{
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);

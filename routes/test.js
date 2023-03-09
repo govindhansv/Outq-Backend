@@ -25,13 +25,13 @@ import Service from "../models/Service.js";
 //         var payload = { notification: { title: 'FCM using flutter and node js', body: 'we are fine now' }, data: { click_action: "FLUTTER NOTIFICATION_CLICK" } }
 //         admin.messaging().send(message)
 //         .then((response) => {
-//             // console.log('Successfully sent message:', response);
+//             // // console.log('Successfully sent message:', response);
 //         })
 //         .catch((error) => {
-//             // console.log('Error sending message:', error);
+//             // // console.log('Error sending message:', error);
 //         });
 //     } catch (error) {
-//         // console.log(error);
+//         // // console.log(error);
 //     }
 // }
 
@@ -41,7 +41,7 @@ const router = express.Router();
 
 
 router.get("/", (req, res) => {
-    // console.log('called');
+    // // console.log('called');
     res.status(200).json({ message: "API Working properly fek guys... " });
 });
 
@@ -51,15 +51,15 @@ router.get("/testing", async (req, res) => {
     var time = "10:20 PM";
    
     // var AMPM = time.match(/\s(.*)$/)[1];
-    // // console.log("10 " + AMPM);
+    // // // console.log("10 " + AMPM);
     var newTime = new Date(new Date("1970/01/01 " + time).getTime() + 180 * 60000).toLocaleTimeString('en-UK', { hour: '2-digit', minute: '2-digit', hour12: false });
-    // console.log(newTime);
+    // // console.log(newTime);
     //     str2 = "05:10";
 
     // if (str1 > str2)
-    //     // console.log("Time 1 is later than time 2");
+    //     // // console.log("Time 1 is later than time 2");
     // else
-    //     // console.log("Time 2 is later than time 1");
+    //     // // console.log("Time 2 is later than time 1");
     
 });
 router.get("/db", async (req, res) => {
@@ -72,7 +72,7 @@ router.get("/db", async (req, res) => {
 router.get("/reg", async (req, res) => {
     try {
         const stores = await Test.find();
-        // console.log(stores);
+        // // console.log(stores);
         res.status(200).json(stores);
     } catch (err) {
         res.status(409).json({ error: err.message });
@@ -81,8 +81,8 @@ router.get("/reg", async (req, res) => {
 
 router.post("/reg", async (req, res) => {
     try {
-        // console.log('called');
-        // console.log(req.body);
+        // // console.log('called');
+        // // console.log(req.body);
         const {
             name, pswd
         } = req.body;
@@ -93,7 +93,7 @@ router.post("/reg", async (req, res) => {
 
         const store = await newTest.save();
         const stores = await Test.find();
-        // console.log(stores);
+        // // console.log(stores);
 
         res.status(201).json({ data: store });
     } catch (err) {

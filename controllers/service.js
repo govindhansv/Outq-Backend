@@ -8,7 +8,7 @@ import {sendNoty} from "../controllers/notification.js";
 
 // REG SERVICES
 export const addService = async (req, res) => {
-    console.log('called');
+    // console.log('called');
     try {
 
         let {
@@ -26,7 +26,7 @@ export const addService = async (req, res) => {
         if (img == "") {
             img = "https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
         }
-        // console.log(req.body);
+        // // console.log(req.body);
 
         const store = await Store.findOne({ _id: storeid })
 
@@ -49,24 +49,24 @@ export const addService = async (req, res) => {
         });
 
         const service = await newService.save();
-        console.log(store);
+        // console.log(store);
         let array = store.followerslist;
-        console.log(" array", array);
+        // console.log(" array", array);
 
         for (let i = 0; i < array.length; i++) {
-            console.log(array[i]);
+            // console.log(array[i]);
             let user = await User.findOne({ _id: array[i] });
-            console.log(user);
+            // console.log(user);
             const newNoti = new Noti({
                 title: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
                 message: `Service Updated`,
                 userid: user._id
             });
             const noti = await newNoti.save();
-            console.log(noti);
+            // console.log(noti);
 
         
-            console.log(user._id);
+            // console.log(user._id);
             
             let data = {
                 token:user.deviceid,
@@ -77,11 +77,11 @@ export const addService = async (req, res) => {
 
         }
 
-        // console.log(" serv", service);
+        // // console.log(" serv", service);
 
         res.status(201).json({ success: true });
     } catch (err) {
-        console.log("err", err);
+        // console.log("err", err);
         res.status(409).json({ error: err.message });
     }
 };
@@ -93,10 +93,10 @@ export const getStoreServices = async (req, res) => {
         const { storeid } = req.params;
         const services = await Service.find({ storeid: storeid }).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
         services.forEach(element => {
-            // // console.log(element);
+            // // // console.log(element);
             element.id = element._id;
         });
-        // // console.log(services);
+        // // // console.log(services);
         res.status(200).json(services);
     } catch (err) {
         res.status(404).json({ message: err.message });
@@ -110,11 +110,11 @@ export const getAllService = async (req, res) => {
     try {
         // const services = await Service.find({}).sort({ time: 1 });
         let services = await Service.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
-        // console.log(services);
+        // // console.log(services);
         services.reverse();
         const stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt');;
         services.forEach(element => {
-            // // console.log(element);
+            // // // console.log(element);
             element.ownerid = element._id;
         });
         res.status(200).json(services);
@@ -126,31 +126,31 @@ export const getAllService = async (req, res) => {
 /* READ Service Data*/
 
 export const getService = async (req, res) => {
-    // console.log(" called");
+    // // console.log(" called");
     try {
-        // console.log(' dfkhsdf');
+        // // console.log(' dfkhsdf');
         const { serviceId } = req.params;
         const service = await Service.find({ _id: serviceId }).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
 
         service.forEach(element => {
-            // // console.log(element);
+            // // // console.log(element);
             element.id = element._id;
         });
 
-        // // console.log(service);
+        // // // console.log(service);
         res.status(201).json(service);
     } catch (err) {
-        // console.log(err);
+        // // console.log(err);
         res.status(404).json({ message: err.message });
     }
 };
 
 // UPDATE SERVICES
 export const updateService = async (req, res) => {
-    // console.log(' called ');
-    // console.log(" er bo", req.body, req.params.id);
+    // // console.log(' called ');
+    // // console.log(" er bo", req.body, req.params.id);
     try {
-console.log(req.body);
+// console.log(req.body);
         Service.findByIdAndUpdate(req.params.id,
             { $set: req.body },
             async function (err, data) {
@@ -161,12 +161,12 @@ console.log(req.body);
                     const store = await Store.findOne({ _id: req.body.storeid })
 
                     let array = store.followerslist;
-                    console.log(" array", array);
+                    // console.log(" array", array);
             
                     for (let i = 0; i < array.length; i++) {
-                        console.log(array[i]);
+                        // console.log(array[i]);
                         let user = await User.findOne({ _id: array[i] });
-                        console.log(user);
+                        // console.log(user);
                         
                         const newNoti = new Noti({
                             title: `${store.name} is updated their ${req.body.name} service price from ${req.body.ogprice}  to ${req.body.price} `,
@@ -175,7 +175,7 @@ console.log(req.body);
                         });
             
                         const noti = await newNoti.save();
-                        console.log(noti);
+                        // console.log(noti);
                         let data = {
                             token:user.deviceid,
                             title: `Service Updated`,
@@ -190,7 +190,7 @@ console.log(req.body);
         
        
     } catch (err) {
-        // console.log(err);
+        // // console.log(err);
         res.status(404).json({ message: err.message });
     }
 };
@@ -198,23 +198,23 @@ console.log(req.body);
 // DELETE SERVICES
 
 export const delService = async (req, res) => {
-    // console.log(' called');
+    // // console.log(' called');
     try {
         const { id } = req.params;
-        // // console.log(id);
+        // // // console.log(id);
         Service.deleteOne({ _id: id },
             function (err, data) {
                 if (err) {
-                    // console.log(err);
+                    // // console.log(err);
                     res.status(200).json({ status: false, err: err });
                 }
                 else {
-                    // console.log(data);
+                    // // console.log(data);
                     res.status(200).json({ status: true, data: data });
                 }
             });
     } catch (err) {
-        // console.log(err);
+        // // console.log(err);
 
         res.status(404).json({ message: err.message });
     }
@@ -223,7 +223,7 @@ export const delService = async (req, res) => {
 
 //   SEARCH STORE
 export const searchServices = async (req, res) => {
-    // console.log(' called ');
+    // // console.log(' called ');
     try {
         let userid = req.params.userid;
         let user = await User.findOne({ userid })
@@ -257,7 +257,7 @@ export const searchServices = async (req, res) => {
         }
 
         const { query } = req.params;
-        // console.log(" query ", query);
+        // // console.log(" query ", query);
 
         Service.find({ name: { $regex: query, $options: 'i' } })
             .sort({ name: 'asc' })
@@ -266,7 +266,7 @@ export const searchServices = async (req, res) => {
                     return res.status(500).send(err);
                 }
                 objects.forEach(element => {
-                    // // console.log(element);
+                    // // // console.log(element);
                     element.id = element._id;
                 });
 
@@ -278,7 +278,7 @@ export const searchServices = async (req, res) => {
                 // Sort the shops based on their distance
                 objects.sort((a, b) => a.distance - b.distance);
 
-                // console.log(objects);
+                // // console.log(objects);
 
                 res.json(objects);
             });
@@ -286,7 +286,7 @@ export const searchServices = async (req, res) => {
 
 
     } catch (err) {
-        // console.log(err);
+        // // console.log(err);
         res.status(200).json({ message: "ERR ", ERR: err });
     }
 };

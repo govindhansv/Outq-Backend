@@ -6,7 +6,7 @@ import Owner from "../models/Owner.js";
 
 export const register = async (req, res) => {
     try {
-        // // console.log(req.body);
+        // // // console.log(req.body);
         let {
             name,
             location,
@@ -44,7 +44,7 @@ export const register = async (req, res) => {
         });
         const store = await newStore.save();
         // const stores = await Store.find({ownerId:ownerId});
-        // // console.log(store);
+        // // // console.log(store);
         // res.status(201).json({ store:store, stores:stores });
         res.status(201).json({ success: true, store: store });
     } catch (err) {
@@ -57,16 +57,16 @@ export const register = async (req, res) => {
 export const getOwnerStores = async (req, res) => {
     try {
         const { ownerId } = req.params;
-        // // console.log(ownerId);
+        // // // console.log(ownerId);
         const stores = await Store.find({ id: ownerId }).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-followerscount').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
-        // // console.log(stores);;
-        // // console.log(stores);;
-        // // console.log(stores);
+        // // // console.log(stores);;
+        // // // console.log(stores);;
+        // // // console.log(stores);
         stores.forEach(element => {
-            // // console.log(element);
+            // // // console.log(element);
             element.type = element._id;
         });
-        // // console.log(stores);
+        // // // console.log(stores);
         res.status(200).json(stores);
     } catch (err) {
         res.status(404).json({ message: err.message });
@@ -77,14 +77,14 @@ export const getOwnerStores = async (req, res) => {
 export const getAllStore = async (req, res) => {
     try {
         let stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
-        // // console.log(stores);;
+        // // // console.log(stores);;
         stores.reverse();
 
         stores.forEach(element => {
-            // // console.log(element);
+            // // // console.log(element);
             element.type = element._id;
         });
-        // console.log(stores);
+        // // console.log(stores);
         res.status(200).json(stores);
     } catch (err) {
         res.status(404).json({ message: err.message });
@@ -99,7 +99,7 @@ export const getStore = async (req, res) => {
 
         res.status(200).json(store);
     } catch (err) {
-        // console.log(err);
+        // // console.log(err);
         res.status(404).json({ message: err.message });
     }
 };
@@ -126,7 +126,7 @@ export const delStore = async (req, res) => {
 export const searchStore = async (req, res) => {
     try {
         const { query } = req.params;
-        // console.log(" query ", query);
+        // // console.log(" query ", query);
         Store.find({ name: { $regex: query, $options: 'i' } })
             .sort({ name: 'asc' })
             .exec((err, objects) => {
@@ -134,7 +134,7 @@ export const searchStore = async (req, res) => {
                     return res.status(500).send(err);
                 }
                 objects.forEach(element => {
-                    // // console.log(element);
+                    // // // console.log(element);
                     element.type = element._id;
                 });
                 res.json(objects);
@@ -147,7 +147,7 @@ export const searchStore = async (req, res) => {
         //             return res.status(500).send(err);
         //         }
         //         objects.forEach(element => {
-        //             // // console.log(element);
+        //             // // // console.log(element);
         //             element.type = element._id;
         //         });
         //         res.json( objects);
@@ -165,18 +165,18 @@ export const searchStore = async (req, res) => {
 
 // UPDATE STORE
 export const updateStore = async (req, res) => {
-    // // console.log('called');
+    // // // console.log('called');
     try {
 
         Store.findByIdAndUpdate(req.params.id,
             { $set: req.body },
             function (err, data) {
                 if (err) {
-                    // // console.log(err);
+                    // // // console.log(err);
                     res.status(200).json({ status: false, err: err });
                 }
                 else {
-                    // // console.log(data);
+                    // // // console.log(data);
                     res.status(200).json({ status: true, data: data });
                 }
             });
