@@ -68,8 +68,10 @@ export const login = async (req, res) => {
       let storeid = store._id.toString();
       res.status(201).json([{"id":ownerid,"storeid":storeid}]);
       
+    } else {
+      
+      res.status(201).json([{"id":ownerid,"storeid":"null"}]);
     }
-    res.status(201).json([{"id":ownerid,"storeid":"null"}]);
     // // console.log(ownerid);
     // // console.log(store);
     // res.status(200).json({ token, owner });
