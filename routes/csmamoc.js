@@ -3,7 +3,8 @@ import express from "express";
 const router = express.Router();
 
 router.get('/dbms', (req,res) =>{
-    let data = [{ title: " sdf", link: " sdf" }];
+    let data = [{ title: " sdf", link: " sdf" }, { title: " sdf", link: " sdf" }, { title: " sdf", link: " sdf" }];
+    console.log(data);
     res.json(data);
 });
 

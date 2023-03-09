@@ -108,8 +108,10 @@ export const getStoreServices = async (req, res) => {
 
 export const getAllService = async (req, res) => {
     try {
-        const services = await Service.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
-
+        // const services = await Service.find({}).sort({ time: 1 });
+        let services = await Service.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
+        // console.log(services);
+        services.reverse();
         const stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt');;
         services.forEach(element => {
             // // console.log(element);

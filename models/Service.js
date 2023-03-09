@@ -59,8 +59,8 @@ const ServiceSchema = new mongoose.Schema(
     id: {
       type: String,
     },
-  
   },
+  { timestamps: true }
 );
 
 const Service = mongoose.model("Service", ServiceSchema);

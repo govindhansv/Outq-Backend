@@ -80,6 +80,7 @@ const StoreSchema = new mongoose.Schema(
       default: [],
     },
   },
+  { timestamps: true }
 );
 
 const Store = mongoose.model("Store", StoreSchema);

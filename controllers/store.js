@@ -76,8 +76,10 @@ export const getOwnerStores = async (req, res) => {
 // READ ALL STORE
 export const getAllStore = async (req, res) => {
     try {
-        const stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
+        let stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
         // // console.log(stores);;
+        stores.reverse();
+
         stores.forEach(element => {
             // // console.log(element);
             element.type = element._id;
