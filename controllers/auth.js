@@ -45,7 +45,7 @@ export const register = async (req, res) => {
     let userid = savedUser._id.toString();
     // console.log(userid);
     res.status(201).json([{ "id": userid }]);
-    
+
     // res.status(201).json(savedUser);
   } catch (err) {
     // console.log("err",err);
@@ -55,24 +55,33 @@ export const register = async (req, res) => {
 
 /* LOGGING IN */
 export const login = async (req, res) => {
-  // console.log('called');
+  console.log('called');
   try {
     const { email, pswd } = req.body;
+    console.log(email,pswd);
     const user = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ msg: "User does not exist. " });
+    console.log(user);
+    if (!user) {
+      return res.status(400).json({ msg: "User does not exist. " });
+      console.log(' uaser not found');
+  }
 
     const isMatch = await bcrypt.compare(pswd, user.pswd);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
+    console.log(isMatch);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials. " });
+      console.log(' invalid');
+    }
 
     // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     // delete user.password;
     // res.status(200).json({ token, user });
-    
+
     let userid = user._id.toString();
     // console.log(userid);
     res.status(201).json([{ "id": userid }]);
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     res.status(500).json({ error: true });
   }
 };
@@ -86,12 +95,12 @@ export const update = async (req, res) => {
     User.findByIdAndUpdate(req.params.userid,
       { $set: req.body },
       function (err, data) {
-          if (err) {
-              res.status(501).json({ status: false, err: err });
-          }
-          else {
-              res.status(201).json({ status: true, data: data });
-          }
+        if (err) {
+          res.status(501).json({ status: false, err: err });
+        }
+        else {
+          res.status(201).json({ status: true, data: data });
+        }
       });
     // res.status(201).json([{ "id": userid }]);
   } catch (err) {

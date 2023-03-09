@@ -45,25 +45,36 @@ export const register = async (req, res) => {
 
 /* LOGGING IN */
 export const login = async (req, res) => {
-  // // console.log('called');
+  // console.log('called');
 
   try {
     const { email, pswd } = req.body;
-    const owner = await Owner.findOne({ email: email });
-    if (!owner) return res.status(400).json({ msg: "Owner does not exist. " });
+    console.log(email,pswd);
     
+    const owner = await Owner.findOne({ email: email });
+    console.log(owner)
+    if (!owner) { return res.status(400).json({ msg: "Owner does not exist. " }); 
+      console.log(' owner not found');
+    }
     const isMatch = await bcrypt.compare(pswd, owner.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
+    console.log(isMatch);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials. " });
+      console.log(' invalif');}
     
     let ownerid = owner._id.toString();
     const store = await Store.findOne({ id: ownerid });
-    let storeid = store._id.toString();
+    if (store) {
+      let storeid = store._id.toString();
+      res.status(201).json([{"id":ownerid,"storeid":storeid}]);
+      
+    }
+    res.status(201).json([{"id":ownerid,"storeid":"null"}]);
     // // console.log(ownerid);
     // // console.log(store);
-    res.status(201).json([{"id":ownerid,"storeid":storeid}]);
     // res.status(200).json({ token, owner });
   } catch (err) {
-    // // console.log(err);
+    console.log(err);
     res.status(500).json({ err: "error true", error: err.message });
   }
 };
