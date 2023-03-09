@@ -20,6 +20,7 @@ import notificationRoutes from "./routes/notification.js";
 // import paymentRoutes from "./routes/payment.js";
 // import historyRoutes from "./routes/history.js";
 import testRoutes from "./routes/test.js";
+import csmamoc from "./routes/csmamoc.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
@@ -81,6 +82,7 @@ app.use("/follow", followRoutes);
 app.use("/order", orderRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/notification", notificationRoutes);
+app.use("/csmamoc", csmamoc);
 // app.use("/payment", paymentRoutes);
 // app.use("/history", testRoutes);
 
