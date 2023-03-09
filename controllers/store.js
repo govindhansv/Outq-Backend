@@ -19,7 +19,8 @@ export const register = async (req, res) => {
             employees,
             longitude,
             latitude,
-            pincode
+            pincode,
+            gender
         } = req.body;
         if (img ==""){
             img = "https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
@@ -38,7 +39,8 @@ export const register = async (req, res) => {
             employees,
             longitude,
             latitude,
-            pincode
+            pincode,
+            gender
             // ownerf:owner.firstName,
             // ownerl:owner.lastName,
         });

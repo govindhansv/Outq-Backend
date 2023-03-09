@@ -68,6 +68,9 @@ const StoreSchema = new mongoose.Schema(
     pincode: {
       type: String,
     },
+    gender: {
+      type: String,
+    },
     followerslist: {
       type: Array,
       default: [],
