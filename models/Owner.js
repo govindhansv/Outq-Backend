@@ -20,7 +20,13 @@ const OwnerSchema = new mongoose.Schema(
     },
     deviceid: {
       type: String,
-      default:""
+      default: ""
+    },
+    phone: {
+      type: String,
+    },
+    cpswd: {
+      type: String,
     },
   },
 );

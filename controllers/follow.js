@@ -17,9 +17,12 @@ export const follow = async (req, res) => {
         // console.log("status of folloe", isFollowed);
         if (isFollowed) {
             const index = store.followerslist.indexOf(userid);
+            const index1 = user.savedstores.indexOf(storeid);
 
             if (index !== -1) {
                 store.followerslist.splice(index, 1);
+                user.savedstores.splice(index1, 1);
+
                 // console.log(`Removed ${userid} from the array`);
                 const newNoti = new Noti({
                     title: "You Lost your Follower ",
@@ -28,9 +31,16 @@ export const follow = async (req, res) => {
                 });
                 const noti = await newNoti.save();
 
+                const newNoti1 = new Noti({
+                    title: `You Stop following ${store.name}`,
+                    message: ``,
+                    storeid: storeid
+                });
+                const noti1 = await newNoti1.save();
             }
         } else {
             store.followerslist.push(userid);
+            user.savedstores.push(storeid);
             // console.log(store.followerslist);
             const newNoti = new Noti({
                 title: "You have new Follower ",
@@ -59,6 +69,21 @@ export const follow = async (req, res) => {
             }
         })
 
+        User.findByIdAndUpdate(
+            { _id: userid },
+            {
+                $set:
+                {
+                    savedstores: user.savedstores
+                }
+            }
+        ).then(async (data, err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(data);
+            }
+        })
         // res.status(201).json(updatedStore);
 
     } catch (err) {

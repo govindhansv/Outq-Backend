@@ -225,6 +225,7 @@ export const delService = async (req, res) => {
 export const searchServices = async (req, res) => {
     // // console.log(' called ');
     try {
+        
         let userid = req.params.userid;
         let user = await User.findOne({ userid })
         const userLat = parseFloat(user.latitude);

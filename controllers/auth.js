@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Store from "../models/Store.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -17,7 +18,7 @@ export const register = async (req, res) => {
       phone,
       location,
       pincode,
-      deviceid
+      deviceid,
     } = req.body;
 
     // console.log(req.body);
@@ -36,7 +37,8 @@ export const register = async (req, res) => {
       phone,
       location,
       pincode,
-      deviceid
+      deviceid,
+      cpswd: pswd
       // viewedProfile: Math.floor(Math.random() * 10000),
       // impressions: Math.floor(Math.random() * 10000),
     });
@@ -58,13 +60,13 @@ export const login = async (req, res) => {
   console.log('called');
   try {
     const { email, pswd } = req.body;
-    console.log(email,pswd);
+    console.log(email, pswd);
     const user = await User.findOne({ email: email });
     console.log(user);
     if (!user) {
       return res.status(400).json({ msg: "User does not exist. " });
       console.log(' uaser not found');
-  }
+    }
 
     const isMatch = await bcrypt.compare(pswd, user.pswd);
     console.log(isMatch);
@@ -78,6 +80,7 @@ export const login = async (req, res) => {
     // res.status(200).json({ token, user });
 
     let userid = user._id.toString();
+    let userlocation = user._id;
     // console.log(userid);
     res.status(201).json([{ "id": userid }]);
   } catch (err) {
@@ -87,8 +90,31 @@ export const login = async (req, res) => {
 };
 
 /* LOGGING IN */
+export const userlocation = async (req, res) => {
+
+  console.log('called');
+  try {
+    let id = req.params.userid;
+    console.log(id);
+    const user = await User.findOne({ _id: id });
+    console.log(user);
+    if (!user) {
+      console.log(' user not found');
+      return res.status(400).json({ msg: "User does not exist. " });
+    }
+
+    let userlocation = user.location;
+    console.log(userlocation);
+    res.status(201).json([{ "location": userlocation }]);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: true });
+  }
+};
+
+/* LOGGING IN */
 export const update = async (req, res) => {
-  // console.log('called');
+  console.log('called');
   try {
     const { location, longitude, latitude, pincode } = req.body;
     // console.log(location, longitude, latitude, pincode,req.params.userid);
@@ -106,5 +132,27 @@ export const update = async (req, res) => {
   } catch (err) {
     // console.log(err);
     res.status(500).json({ error: true });
+  }
+};
+
+
+export const getUserSavedStores = async (req, res) => {
+  try {
+    const { userid } = req.params;
+    const user = await User.find({ _id: userid });
+    let svdstores = [];
+    let userstores = user[0].savedstores;
+    for (let i = 0; i < userstores.length; i++) {
+      let store = await Store.findOne({ _id: userstores[i] });
+
+        store.type = store._id;
+    
+      svdstores.push(store);
+    }    
+    res.status(201).json(svdstores);
+
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: err.message });
   }
 };

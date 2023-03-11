@@ -1,5 +1,5 @@
 import Store from "../models/Store.js";
-import Owner from "../models/Owner.js";
+import Service from "../models/Service.js";
 
 // STORE CRUD
 /* REGISTER STORE */
@@ -22,7 +22,7 @@ export const register = async (req, res) => {
             pincode,
             gender
         } = req.body;
-        if (img ==""){
+        if (img == "") {
             img = "https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
         }
         // const owner = await Owner.findById(ownerId);
@@ -158,10 +158,80 @@ export const searchStore = async (req, res) => {
         // Model.find({ field: { $eq: value } })
         // Model.find({ field: { $in: [value1, value2, ...] } })
         // search array of words
-        
+
     } catch (err) {
 
         res.status(200).json({ message: "ERR ", ERR: err });
+    }
+};
+//   QUERY STORE
+
+export const queryStore = async (req, res) => {
+    console.log('called');
+    try {
+        const { query } = req.params;
+
+        let arr = [];
+        let services = [];
+        if (query == 'Men') {
+
+            Store.find({ gender: { $in: ["Men", "Unisex"] } })
+                .sort({ name: 'asc' })
+                .exec(async (err, objects) => {
+                    if (err) {
+                        return res.status(500).send(err);
+                    } else {
+                        let a = [];
+
+                        objects.forEach(element => {
+                            // // // console.log(element);
+                            element.type = element._id;
+                            a.push(element._id);
+                        });
+
+                        arr = arr.concat(a);
+                        for (let i = 0; i < arr.length; i++) {
+                            let service = await Service.findOne({ "storeid": arr[i] });
+                            if (service) {
+                                services.push(service);
+                            }
+                        }
+                        res.status(201).json(services);
+                    }
+                });
+
+        } else {
+
+            Store.find({ gender: { $in: ["Women", "Unisex"] } })
+                .sort({ name: 'asc' })
+                .exec(async (err, objects) => {
+                    if (err) {
+                        return res.status(500).send(err);
+                    } else {
+                        let a = [];
+
+                        objects.forEach(element => {
+                            // // // console.log(element);
+                            element.type = element._id;
+                            a.push(element._id);
+                        });
+
+                        arr = arr.concat(a);
+                        for (let i = 0; i < arr.length; i++) {
+                            let service = await Service.findOne({ "storeid": arr[i] });
+                            if (service) {
+                                services.push(service);
+                            }
+                        }
+                        res.status(201).json(services);
+                    }
+                });
+        }
+
+
+    } catch (err) {
+        console.log(err);
+        res.status(501).json({ message: "ERR ", ERR: err });
     }
 };
 

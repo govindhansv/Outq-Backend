@@ -50,14 +50,17 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default:" "
     },
+    cpswd: {
+      type: String,
+    },
     // picturePath: {
     //   type: String,
     //   default: "",
     // },
-    // friends: {
-    //   type: Array,
-    //   default: [],
-    // },
+    savedstores: {
+      type: Array,
+      default: [],
+    },
     // occupation: String,
     // viewedProfile: Number,
     // impressions: Number,
