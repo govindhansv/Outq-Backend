@@ -126,6 +126,10 @@ router.get('/os', (req, res) => {
     let data = [{ title: " No notes available now. We will update soon ", link: " " },];
     res.json(data);
 });
+router.get('/department', (req, res) => {
+    let data = [{ title: "Visit MAMOCOLLEGE Website", link: "https://www.mamocollege.org/" },];
+    res.json(data);
+});
 
 router.get('/dc', (req, res) => {
     let data = [
