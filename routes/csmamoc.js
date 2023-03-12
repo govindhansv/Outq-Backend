@@ -2,71 +2,73 @@ import express from "express";
 
 const router = express.Router();
 
-router.get('/dbms', (req,res) =>{
-    let data = [{ title: " 2017", link: "https://e4a3-103-154-54-137.in.ngrok.io/store/store/get" }, { title: " 2018", title:"" }, { title: " 2019", link: " sdf" }];
-    // console.log(data);
+router.get('/dbms', (req, res) => {
+    let data = [{ title: "DBMS COMPLETE NOTES", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_9dc5d0324bfd4cbf9cd932af913fddd8.pdf" },
+    { title: " 2018", title: "" },
+    { title: " 2019", link: " sdf" }
+    ];
     res.json(data);
 });
 
-router.get('/dcof', (req,res) =>{
+router.get('/dcof', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/mp', (req,res) =>{
+router.get('/mp', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/html', (req,res) =>{
+router.get('/html', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/sensor', (req,res) =>{
+router.get('/sensor', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/java', (req,res) =>{
+router.get('/java', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
 
-router.get('/c', (req,res) =>{
+router.get('/c', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/php', (req,res) =>{
+router.get('/php', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/ds', (req,res) =>{
+router.get('/ds', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/python', (req,res) =>{
+router.get('/python', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/cg', (req,res) =>{
+router.get('/cg', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/cn', (req,res) =>{
+router.get('/cn', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/co', (req,res) =>{
+router.get('/co', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/os', (req,res) =>{
+router.get('/os', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/dc', (req,res) =>{
+router.get('/dc', (req, res) => {
     let data = [{ title: " sdf", link: " sdf" }];
     res.json(data);
 });
-router.get('/android', (req,res) =>{
-    let data = [{ title: " sdf", link: " sdf" }, {title: " sdf", link: " sdf" }];
+router.get('/android', (req, res) => {
+    let data = [{ title: " sdf", link: " sdf" }, { title: " sdf", link: " sdf" }];
     res.json(data);
 });
 
