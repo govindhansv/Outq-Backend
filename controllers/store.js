@@ -191,11 +191,12 @@ export const queryStore = async (req, res) => {
 
                         arr = arr.concat(a);
                         for (let i = 0; i < arr.length; i++) {
-                            let service = await Service.findOne({ "storeid": arr[i] });
+                            let service = await Service.find({ "storeid": arr[i] });
                             if (service) {
-                                services.push(service);
+                                services = services.concat(service);
                             }
                         }
+                       
                         res.status(201).json(services);
                     }
                 });
@@ -215,12 +216,12 @@ export const queryStore = async (req, res) => {
                             element.type = element._id;
                             a.push(element._id);
                         });
-
+                        
                         arr = arr.concat(a);
-                        for (let i = 0; i < arr.length; i++) {
-                            let service = await Service.findOne({ "storeid": arr[i] });
+                        for (let i = 0; i < a.length; i++) {
+                            let service = await Service.find({ "storeid": a[i] });
                             if (service) {
-                                services.push(service);
+                                services = services.concat(service);
                             }
                         }
                         res.status(201).json(services);
