@@ -16,14 +16,13 @@ router.get('/dbms', (req, res) => {
 });
 
 router.get('/dcof', (req, res) => {
-    let data = [{ title: " COMPLETE NOTES", link: " " },
-    { title: "UNIT 1", title: " " },
-    { title: " UNIT 2", link: "     " },
-    { title: " UNIT 3", link: " " },
-    { title: " UNIT 4", link: "     " },
-    { title: " UNIT 5", link: " " },
-    { title: " Lecture Notes", link: "  " },
-    { title: " Previous year Q papers", link: "     " },
+    let data = [
+        { title: "UNIT 1", title: "https://www.csmamocollege.in/_files/ugd/8cbac8_8ed70d42401a42e0bf7697e877b85f63.pdf " },
+        { title: " UNIT 2", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_2d8570d5852a4d0a8535f4a33be71311.pdf     " },
+        { title: " UNIT 3", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_c8a40d6a0001433bb6458660e65db858.pdf " },
+        { title: " UNIT 4", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_3c05c47ec11c4701b300c4a8c4648175.pdf     " },
+        { title: " Lecture Notes", link: "https://drive.google.com/file/d/1H-Vi4MEUs1FwqWfSqOy-iL_ZgNQzhqtu/view?usp=sharing  " },
+        { title: " Previous year Q papers", link: "https://drive.google.com/file/d/1H-Vi4MEUs1FwqWfSqOy-iL_ZgNQzhqtu/view?usp=sharing     " },
     ];
     res.json(data);
 });
@@ -36,26 +35,12 @@ router.get('/mp', (req, res) => {
 });
 
 router.get('/html', (req, res) => {
-    let data = [{ title: " COMPLETE NOTES", link: " " },
-    { title: "UNIT 1", title: " " },
-    { title: " UNIT 2", link: "     " },
-    { title: " UNIT 3", link: " " },
-    { title: " UNIT 4", link: "     " },
-    { title: " UNIT 5", link: " " },
-    { title: " Lecture Notes", link: "  " },
-    { title: " Previous year Q papers", link: "     " },
-    ];
+    let data = [{ title: " No notes available now. We will update soon ", link: " " },];
     res.json(data);
 });
+
 router.get('/sensor', (req, res) => {
-    let data = [{ title: " COMPLETE NOTES", link: " " },
-    { title: "UNIT 1", title: " " },
-    { title: " UNIT 2", link: "     " },
-    { title: " UNIT 3", link: " " },
-    { title: " UNIT 4", link: "     " },
-    { title: " UNIT 5", link: " " },
-    { title: " Lecture Notes", link: "  " },
-    { title: " Previous year Q papers", link: "     " },
+    let data = [{ title: " COMPLETE NOTES", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_f11923a6523e476885dc357fb750f625.pdf " },
     ];
     res.json(data);
 });
@@ -81,14 +66,13 @@ router.get('/c', (req, res) => {
 });
 
 router.get('/php', (req, res) => {
-    let data = [{ title: " COMPLETE NOTES", link: " " },
-    { title: "UNIT 1", title: " " },
-    { title: " UNIT 2", link: "     " },
-    { title: " UNIT 3", link: " " },
-    { title: " UNIT 4", link: "     " },
-    { title: " UNIT 5", link: " " },
-    { title: " Lecture Notes", link: "  " },
-    { title: " Previous year Q papers", link: "     " },
+    let data = [{ title: " COMPLETE NOTES", link: "https://9e5c4a8c-d53f-4efd-9369-fca624025bed.filesusr.com/ugd/8cbac8_b81f2e4b1d3c41bea3d0cc54dc56f38b.pptx?dn=Introduction%20to%20PHP.pptx " },
+    { title: "Introduction to PHP", title: "https://9e5c4a8c-d53f-4efd-9369-fca624025bed.filesusr.com/ugd/8cbac8_cd7428807ac243dc9b1f63046e211796.pptx?dn=Working%20with%20PHP.pptx " },
+    { title: "Working with PHP", link: "https://9e5c4a8c-d53f-4efd-9369-fca624025bed.filesusr.com/ugd/8cbac8_c87e54e1142c4eb4afde90e07075d8f7.pptx?dn=PHP%20%26%20POSTGRESQL.pptx     " },
+    { title: "PHP with POSTGRES", link: "https://9e5c4a8c-d53f-4efd-9369-fca624025bed.filesusr.com/ugd/8cbac8_d7c4537e72c14841bf14490fe307e925.pptx?dn=JavaScript.pptx " },
+    { title: " Previous year Q papers 2018", link: "https://drive.google.com/file/d/1WfPssUdfz9r9hFvmqFlOTdm7yYlXpH4w/view?usp=sharing     " },
+    { title: " Previous year Q papers 2019", link: "https://drive.google.com/file/d/1jkQ6B_jb9J3jZzzO1DSQ26r9a_SD83_R/view?usp=sharing  " },
+    { title: " Previous year Q papers 2020", link: "https://drive.google.com/file/d/1eNYtVr5Uo4A7P0cXjMaNtjLCaEPB6eWa/view?usp=sharing   " },
     ];
     res.json(data);
 });
@@ -117,53 +101,44 @@ router.get('/python', (req, res) => {
     ];
     res.json(data);
 });
+
 router.get('/cg', (req, res) => {
-    let data = [{ title: " COMPLETE NOTES", link: " " },
-    { title: "UNIT 1", title: " " },
-    { title: " UNIT 2", link: "     " },
-    { title: " UNIT 3", link: " " },
-    { title: " UNIT 4", link: "     " },
-    { title: " UNIT 5", link: " " },
-    { title: " Lecture Notes", link: "  " },
-    { title: " Previous year Q papers", link: "     " },
+    let data = [{ title: " COMPLETE NOTES", link: "https://www.csmamocollege.in/copy-of-ppt " },
+    { title: " Previous year Q papers 2018", link: "https://drive.google.com/file/d/16VofoN1_IcV-UnBvzMsUQMKz8I0l9GOL/view?usp=sharing     " },
+    { title: " Previous year Q papers 2020", link: "https://drive.google.com/file/d/1x78CqqeYPWd0eQJeSn2mABJNc-aykS9f/view?usp=sharing     " },
+    { title: " Previous year Q papers 2022", link: "https://drive.google.com/file/d/1on_V0AE4eCEpHvP5r57jUK6scdFoKWZK/view?usp=sharing     " },
     ];
     res.json(data);
 });
+
 router.get('/cn', (req, res) => {
-    let data = [{ title: " COMPLETE NOTES", link: " " },
-    { title: "UNIT 1", title: " " },
-    { title: " UNIT 2", link: "     " },
-    { title: " UNIT 3", link: " " },
-    { title: " UNIT 4", link: "     " },
-    { title: " UNIT 5", link: " " },
-    { title: " Lecture Notes", link: "  " },
-    { title: " Previous year Q papers", link: "     " },
+    let data = [{ title: "No notes available now. We will update soon", link: " " },
     ];
     res.json(data);
 });
+
 router.get('/co', (req, res) => {
     let data = [{ title: "No notes available now. We will update soon", link: " " },
-   
     ];
     res.json(data);
 });
 router.get('/os', (req, res) => {
-    let data = [{ title: " No notes available now. We will update soon ", link: " " },
-    ];
+    let data = [{ title: " No notes available now. We will update soon ", link: " " },];
     res.json(data);
 });
+
 router.get('/dc', (req, res) => {
     let data = [
-    { title: "UNIT 1", title: "https://www.csmamocollege.in/_files/ugd/8cbac8_8ed70d42401a42e0bf7697e877b85f63.pdf " },
-    { title: " UNIT 2", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_2d8570d5852a4d0a8535f4a33be71311.pdf     " },
-    { title: " UNIT 3", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_c8a40d6a0001433bb6458660e65db858.pdf " },
-    { title: " UNIT 4", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_3c05c47ec11c4701b300c4a8c4648175.pdf     " },
-    { title: " UNIT 5", link: " " },
-    { title: " Lecture Notes", link: "https://drive.google.com/file/d/1H-Vi4MEUs1FwqWfSqOy-iL_ZgNQzhqtu/view?usp=sharing  " },
-    { title: " Previous year Q papers", link: "https://drive.google.com/file/d/1H-Vi4MEUs1FwqWfSqOy-iL_ZgNQzhqtu/view?usp=sharing     " },
+        { title: "UNIT 1", title: "https://www.csmamocollege.in/_files/ugd/8cbac8_8ed70d42401a42e0bf7697e877b85f63.pdf " },
+        { title: " UNIT 2", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_2d8570d5852a4d0a8535f4a33be71311.pdf     " },
+        { title: " UNIT 3", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_c8a40d6a0001433bb6458660e65db858.pdf " },
+        { title: " UNIT 4", link: "https://www.csmamocollege.in/_files/ugd/8cbac8_3c05c47ec11c4701b300c4a8c4648175.pdf     " },
+        { title: " Lecture Notes", link: "https://drive.google.com/file/d/1H-Vi4MEUs1FwqWfSqOy-iL_ZgNQzhqtu/view?usp=sharing  " },
+        { title: " Previous year Q papers", link: "https://drive.google.com/file/d/1H-Vi4MEUs1FwqWfSqOy-iL_ZgNQzhqtu/view?usp=sharing     " },
     ];
     res.json(data);
 });
+
 router.get('/android', (req, res) => {
     let data = [{ title: " COMPLETE NOTES", link: "https://www.csmamocollege.in/copy-of-java-ppt " },
     { title: "UNIT 1", title: "https://www.csmamocollege.in/_files/ugd/8cbac8_2af6e120ddf8454092600d38d3944de6.pdf " },
