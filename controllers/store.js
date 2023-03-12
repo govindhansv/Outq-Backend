@@ -69,7 +69,7 @@ export const getOwnerStores = async (req, res) => {
             element.type = element._id;
         });
         // // // console.log(stores);
-        res.status(200).json(stores);
+        res.status(201).json(stores);
     } catch (err) {
         res.status(404).json({ message: err.message });
     }
@@ -80,14 +80,14 @@ export const getAllStore = async (req, res) => {
     try {
         let stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
         // // // console.log(stores);;
-        stores.reverse();
+        // stores.reverse();
 
         stores.forEach(element => {
             // // // console.log(element);
             element.type = element._id;
         });
         // // console.log(stores);
-        res.status(200).json(stores);
+        res.status(201).json(stores);
     } catch (err) {
         res.status(404).json({ message: err.message });
     }
@@ -99,7 +99,7 @@ export const getStore = async (req, res) => {
         const { storeId } = req.params;
         const store = await Store.find({ _id: storeId });
 
-        res.status(200).json(store);
+        res.status(201).json(store);
     } catch (err) {
         // // console.log(err);
         res.status(404).json({ message: err.message });
@@ -113,10 +113,10 @@ export const delStore = async (req, res) => {
         Store.remove({ id },
             function (err, data) {
                 if (err) {
-                    res.status(200).json({ status: false, err: err });
+                    res.status(201).json({ status: false, err: err });
                 }
                 else {
-                    res.status(200).json({ status: true, data: data });
+                    res.status(201).json({ status: true, data: data });
                 }
             });
     } catch (err) {
@@ -161,7 +161,7 @@ export const searchStore = async (req, res) => {
 
     } catch (err) {
 
-        res.status(200).json({ message: "ERR ", ERR: err });
+        res.status(201).json({ message: "ERR ", ERR: err });
     }
 };
 //   QUERY STORE
@@ -245,11 +245,11 @@ export const updateStore = async (req, res) => {
             function (err, data) {
                 if (err) {
                     // // // console.log(err);
-                    res.status(200).json({ status: false, err: err });
+                    res.status(201).json({ status: false, err: err });
                 }
                 else {
                     // // // console.log(data);
-                    res.status(200).json({ status: true, data: data });
+                    res.status(201).json({ status: true, data: data });
                 }
             });
     } catch (err) {

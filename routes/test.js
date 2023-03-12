@@ -42,7 +42,7 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
     // // console.log('called');
-    res.status(200).json({ message: "API Working properly fek guys... " });
+    res.status(201).json({ message: "API Working properly fek guys... " });
 });
 
 
@@ -65,7 +65,7 @@ router.get("/testing", async (req, res) => {
 router.get("/db", async (req, res) => {
     let allservices = await Service.find({})
 
-    res.status(200).json(allservices);
+    res.status(201).json(allservices);
 });
 
 
@@ -73,7 +73,7 @@ router.get("/reg", async (req, res) => {
     try {
         const stores = await Test.find();
         // // console.log(stores);
-        res.status(200).json(stores);
+        res.status(201).json(stores);
     } catch (err) {
         res.status(409).json({ error: err.message });
     }

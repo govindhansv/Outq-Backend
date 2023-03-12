@@ -76,7 +76,7 @@ export const login = async (req, res) => {
     }
     // // console.log(ownerid);
     // // console.log(store);
-    // res.status(200).json({ token, owner });
+    // res.status(201).json({ token, owner });
   } catch (err) {
     console.log(err);
     res.status(500).json({ err: "error true", error: err.message });

@@ -97,7 +97,7 @@ export const getStoreServices = async (req, res) => {
             element.id = element._id;
         });
         // // // console.log(services);
-        res.status(200).json(services);
+        res.status(201).json(services);
     } catch (err) {
         res.status(404).json({ message: err.message });
     }
@@ -109,15 +109,16 @@ export const getStoreServices = async (req, res) => {
 export const getAllService = async (req, res) => {
     try {
         // const services = await Service.find({}).sort({ time: 1 });
-        let services = await Service.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
+            
+            let services = await Service.find({}).sort({ storename: 'asc' }).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
         // // console.log(services);
-        services.reverse();
+        // services.reverse();
         const stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt');;
         services.forEach(element => {
             // // // console.log(element);
             element.ownerid = element._id;
         });
-        res.status(200).json(services);
+        res.status(201).json(services);
     } catch (err) {
         res.status(404).json({ message: err.message });
     }
@@ -155,7 +156,7 @@ export const updateService = async (req, res) => {
             { $set: req.body },
             async function (err, data) {
                 if (err) {
-                    res.status(200).json({ status: false, err: err });
+                    res.status(201).json({ status: false, err: err });
                 }
                 else {
                     const store = await Store.findOne({ _id: req.body.storeid })
@@ -184,7 +185,7 @@ export const updateService = async (req, res) => {
                         sendNoty(data);
             
                     }
-                    res.status(200).json({ status: true, data: data });
+                    res.status(201).json({ status: true, data: data });
                 }
             });
         
@@ -206,11 +207,11 @@ export const delService = async (req, res) => {
             function (err, data) {
                 if (err) {
                     // // console.log(err);
-                    res.status(200).json({ status: false, err: err });
+                    res.status(201).json({ status: false, err: err });
                 }
                 else {
                     // // console.log(data);
-                    res.status(200).json({ status: true, data: data });
+                    res.status(201).json({ status: true, data: data });
                 }
             });
     } catch (err) {
@@ -288,6 +289,6 @@ export const searchServices = async (req, res) => {
 
     } catch (err) {
         // // console.log(err);
-        res.status(200).json({ message: "ERR ", ERR: err });
+        res.status(201).json({ message: "ERR ", ERR: err });
     }
 };

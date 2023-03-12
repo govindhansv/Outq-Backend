@@ -77,7 +77,7 @@ export const login = async (req, res) => {
 
     // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     // delete user.password;
-    // res.status(200).json({ token, user });
+    // res.status(201).json({ token, user });
 
     let userid = user._id.toString();
     let userlocation = user._id;
