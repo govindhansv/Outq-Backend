@@ -532,22 +532,22 @@ export const getTimeSlots = async (req, res) => {
             res.status(201).json(timeslots[0].times);
         }
     } catch (err) {
-        // console.log("err", err);
+        console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 async function firstbooking(storeid, date) {
-    // console.log(' storeid ',storeid);
-    let store = await Store.find({ storeid }).select('-createdAt').select('-__v').select('-updatedAt');
-    // console.log(' store ',store);
+    console.log(' storeid ',storeid);
+    let store = await Store.findOne({ _id:storeid }).select('-createdAt').select('-__v').select('-updatedAt');
+    console.log(' store ',store);
 
-    let time = convertToTime(store[0].start);
-    // console.log("time",time);
+    let time = convertToTime(store.start);
+    console.log("time old",time);
     // console.log("time1",time1);
 
-    const startTime = new Date(`2023-02-25T0${convertToTime(store[0].start)}`);
-    const endTime = new Date(`2023-02-25T${convertToTime(store[0].end)}`);
+    const startTime = new Date(`2023-02-25T0${convertToTime(store.start)}`);
+    const endTime = new Date(`2023-02-25T${convertToTime(store.end)}`);
     const diffHours = Math.floor((endTime.getTime() - startTime.getTime()) / 3600000);
 
     // console.log("start", startTime);
@@ -563,17 +563,18 @@ async function firstbooking(storeid, date) {
             status: "n"
         }
         time = addMinutesToTimeString(time, 5)
+        console.log(" time new",time);
         times.push(obj);
-
+        console.log(" obj",obj);
     }
-    // console.log(times);
+    console.log("times",times);
     const newTimeSlot = new TimeSlot({
         date,
         storeid,
         times
     });
     const savedTimeSlot = await newTimeSlot.save();
-    // console.log(savedTimeSlot);
+    console.log("savedtimes",savedTimeSlot);
     return savedTimeSlot;
 }
 
