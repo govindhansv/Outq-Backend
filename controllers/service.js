@@ -2,7 +2,7 @@ import Store from "../models/Store.js";
 import Service from "../models/Service.js"
 import User from "../models/User.js"
 import Noti from "../models/Noti.js"
-import {sendNoty} from "../controllers/notification.js";
+import { sendNoty } from "../controllers/notification.js";
 
 // SERVICES CRUD
 
@@ -65,11 +65,11 @@ export const addService = async (req, res) => {
             const noti = await newNoti.save();
             // console.log(noti);
 
-        
+
             // console.log(user._id);
-            
+
             let data = {
-                token:user.deviceid,
+                token: user.deviceid,
                 title: `Service Updated`,
                 body: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
             }
@@ -109,11 +109,41 @@ export const getStoreServices = async (req, res) => {
 export const getAllService = async (req, res) => {
     try {
         // const services = await Service.find({}).sort({ time: 1 });
-            
-            let services = await Service.find({}).sort({ storename: 'asc' }).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
-        // // console.log(services);
+
+        // let services = await Service.find({}).sort({ storename: 'asc' }).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
+        let services = await Service.aggregate([
+            {
+                $addFields: {
+                    offer_percentage: {
+                        $multiply: [
+                            { $divide: [{ $subtract: [{ $toDouble: { $replaceOne: { input: "$ogprice", find: ",", replacement: "" } } }, { $toDouble: { $replaceOne: { input: "$price", find: ",", replacement: "" } } }] }, { $toDouble: { $replaceOne: { input: "$ogprice", find: ",", replacement: "" } } }] },
+                            100
+                        ]
+                    }
+                }
+            },
+            { $sort: { offer_percentage: -1 } },
+            {
+                $project: {
+                    _id: 0,
+                    name: 1,
+                    price: 1,
+                    description: 1,
+                    ogprice: 1,
+                    img:1,
+                    storeid:1,
+                    ownerid:1,
+                    duration:1,
+                    start:1,
+                    end:1,
+                    storename:1
+                }
+            }
+         
+        ])
+        console.log(services);
         // services.reverse();
-        const stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt');;
+        // const stores = await Store.find({}).select('-__v').select('-updatedAt');
         services.forEach(element => {
             // // // console.log(element);
             element.ownerid = element._id;
@@ -151,7 +181,7 @@ export const updateService = async (req, res) => {
     // // console.log(' called ');
     // // console.log(" er bo", req.body, req.params.id);
     try {
-// console.log(req.body);
+        // console.log(req.body);
         Service.findByIdAndUpdate(req.params.id,
             { $set: req.body },
             async function (err, data) {
@@ -163,33 +193,33 @@ export const updateService = async (req, res) => {
 
                     let array = store.followerslist;
                     // console.log(" array", array);
-            
+
                     for (let i = 0; i < array.length; i++) {
                         // console.log(array[i]);
                         let user = await User.findOne({ _id: array[i] });
                         // console.log(user);
-                        
+
                         const newNoti = new Noti({
                             title: `${store.name} is updated their ${req.body.name} service price from ${req.body.ogprice}  to ${req.body.price} `,
                             message: `Service Updated`,
                             userid: user._id
                         });
-            
+
                         const noti = await newNoti.save();
                         // console.log(noti);
                         let data = {
-                            token:user.deviceid,
+                            token: user.deviceid,
                             title: `Service Updated`,
                             body: `${store.name} is updated their ${name} service price from ${ogprice}  to ${price} `,
                         }
                         sendNoty(data);
-            
+
                     }
                     res.status(201).json({ status: true, data: data });
                 }
             });
-        
-       
+
+
     } catch (err) {
         // // console.log(err);
         res.status(404).json({ message: err.message });
@@ -226,7 +256,7 @@ export const delService = async (req, res) => {
 export const searchServices = async (req, res) => {
     // // console.log(' called ');
     try {
-        
+
         let userid = req.params.userid;
         let user = await User.findOne({ userid })
         const userLat = parseFloat(user.latitude);
