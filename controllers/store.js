@@ -97,7 +97,27 @@ export const getAllStore = async (req, res) => {
 export const getStore = async (req, res) => {
     try {
         const { storeId } = req.params;
-        const store = await Store.find({ _id: storeId });
+        const store = await Store.findById(storeId);
+        // store.views.push(" f");
+
+        // store.views = store.views + 1;
+
+        // Store.findByIdAndUpdate(
+        //     { _id: storeId },
+        //     {
+        //         $set:
+        //         {
+        //             followerslist: store.followerslist
+        //         }
+        //     }
+        // ).then(async (data, err) => {
+        //     if (err) {
+        //         // console.log(err);
+        //     } else {
+        //         // console.log(data);
+        //     }
+            
+        // })
 
         res.status(201).json(store);
     } catch (err) {

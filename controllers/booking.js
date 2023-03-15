@@ -546,13 +546,13 @@ async function firstbooking(storeid, date) {
     console.log("time old",time);
     // console.log("time1",time1);
 
-    const startTime = new Date(`2023-02-25T0${convertToTime(store.start)}`);
+    const startTime = new Date(`2023-02-25T${convertToTime(store.start)}`);
     const endTime = new Date(`2023-02-25T${convertToTime(store.end)}`);
     const diffHours = Math.floor((endTime.getTime() - startTime.getTime()) / 3600000);
 
     // console.log("start", startTime);
     // console.log("end", endTime);
-    // console.log("diff", diffHours);
+    console.log("diff", diffHours);
     let times = [];
 
     for (let hour = 0; hour < 12 * diffHours; hour = hour + 1) {

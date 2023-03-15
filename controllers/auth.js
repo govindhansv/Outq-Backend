@@ -19,6 +19,7 @@ export const register = async (req, res) => {
       location,
       pincode,
       deviceid,
+      
     } = req.body;
 
     // console.log(req.body);

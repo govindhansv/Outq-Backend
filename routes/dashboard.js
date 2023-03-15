@@ -7,5 +7,4 @@ router.get("/analytics/:storeid/:today/:yesterday", fetch);
 router.get("/analytics/services/:storeid", services);
 
 
-
 export default router;

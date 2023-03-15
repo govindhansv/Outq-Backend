@@ -64,9 +64,8 @@ export const follow = async (req, res) => {
                 // console.log(err);
             } else {
                 // console.log(data);
-
-
             }
+            
         })
 
         User.findByIdAndUpdate(
