@@ -6,27 +6,27 @@ import mongoose from "mongoose";
 // GET all reviews
 export const getStoreReviews = async (req, res) => {
     try {
-        const count = await Review.find(
-            { storeid: req.params.storeid });
+        // const count = await Review.find(
+        //     { storeid: req.params.storeid });
         
-        console.log(count.length);
-        const id = req.params.storeid;
+        // console.log(count.length);
+        // const id = req.params.storeid;
 
-        Store.findByIdAndUpdate(
-            { _id: req.params.storeid },
-            {
-                $set:
-                {
-                    reviews: 19
-                }
-            }
-        ).then(async (data, err) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(data);
-            }
-        })
+        // Store.findByIdAndUpdate(
+        //     { _id: req.params.storeid },
+        //     {
+        //         $set:
+        //         {
+        //             reviews: 19
+        //         }
+        //     }
+        // ).then(async (data, err) => {
+        //     if (err) {
+        //         console.log(err);
+        //     } else {
+        //         console.log(data);
+        //     }
+        // })
 
         Review.find({ "storeid": id })
             .then(reviews => {
