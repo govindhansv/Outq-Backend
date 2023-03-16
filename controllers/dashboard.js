@@ -8,7 +8,7 @@ import { DateTime } from 'luxon';
 export const services = async (req, res) => {
   try {
     let { storeid } = req.params;
-    storeid = "64082ee0cd603a2fb02cdbc6";
+    // storeid = "64082ee0cd603a2fb02cdbc6";
 
     // let store = await Store.findById(storeid);
 
@@ -47,7 +47,7 @@ export const fetch = async (req, res) => {
   console.log('dash called');
   try {
     let { storeid, today, yesterday } = req.params;
-    storeid = "64082ee0cd603a2fb02cdbc6";
+    // storeid = "64082ee0cd603a2fb02cdbc6";
     // console.log(today, yesterday);
     const torders = await Order.find({ "storeid": storeid, "date": today, "status": "Success" }).select('-createdAt').select('-__v').select('-updatedAt');
     const yorders = await Order.find({ "storeid": storeid, "date": yesterday, "status": "Success" }).select('-createdAt').select('-__v').select('-updatedAt');
@@ -82,9 +82,15 @@ export const fetch = async (req, res) => {
     // let failureorders = await Order.find({ "storeid": storeid, "status": "Cancelled" }).select('-createdAt').select('-__v').select('-updatedAt');
 
     let storedata = await Store.findById(storeid);
+    let storeview = storedata.bookedtimes.length;
     let followers = storedata.followerslist.length;
     // console.log(storedata);
     // console.log(followers);
+    if (storeview >= 0) {
+
+    } else {
+      storeview = 0;
+    }
     if (followers >= 0) {
 
     } else {
@@ -97,7 +103,7 @@ export const fetch = async (req, res) => {
 
     
 
-    res.status(201).json({ t: torders.length, y: yorders.length, growth: growth, followers: followers, orders: [ttotalorders, tsucessorders, tfailureorders]});
+    res.status(201).json({ t: torders.length, y: yorders.length, growth: growth, followers: followers, orders: [ttotalorders, tsucessorders, tfailureorders],storeview:storeview});
 
     // let order = { "_id": { "$oid": "640836048d2f97da954b7880" }, "start": "9:00", "end": "10:00 AM", "storeid": "64082ee0cd603a2fb02cdbc6", "serviceid": "64083378cd603a2fb02cdc22", "userid": "6408353d8d2f97da954b7861", "price": "3000", "date": "2023-03-08", "servicename": "Hydra facial cleanup", "storename": "SKY BEAUTY CARE ", "status": "Success", "__v": { "$numberInt": "0" } }
 

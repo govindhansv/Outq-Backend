@@ -6,7 +6,7 @@ import TimeSlot from "../models/TimeSlot.js"
 import Service from "../models/Service.js"
 import Owner from "../models/Owner.js"
 import Noti from "../models/Noti.js"
-import {sendNoty} from "../controllers/notification.js";
+import { sendNoty } from "../controllers/notification.js";
 
 /* Create new booking order */
 
@@ -29,144 +29,150 @@ export const booking = async (req, res) => {
     // FINDING COUNTS
 
     console.log(req.body);
-console.log("storeid\n",storeid);
-    let service = await Service.findOne({ _id:serviceid });
+    console.log("storeid\n", storeid);
+    let service = await Service.findOne({ _id: serviceid });
     console.log(service);
 
-    let store = await Store.findOne({ _id:storeid });
-console.log("store \n\n\n",store);
-    let endtime = addMinutesToTimeString(start, service.duration);
-    let user = await User.findOne({ _id:userid });
-
-    end = endtime;
-
-    let employeecount = parseInt(store.employees);
-
-    console.log("employee count", employeecount);
-    console.log(" endtime", end);
-
-    //Checking count status 
-
-    let timeslots1 = await TimeSlot.find({ storeid: storeid, date: date }).select('times').select('date');
-    let timeslots = timeslots1[0].times;
-    console.log("firstdate", timeslots1);
-    console.log("firstdateid", timeslots1[0]._id);
-
-    let pass = true;
-    let array = [];
-
-    function multipleblocking(start) {
-        let nots = service.duration / 5
-        nots = Math.ceil(nots);
-        array.push(start);
-        for (let index = 0; index < nots - 1; index++) {
-            start = addMinutesToTimeString(start, 5);
-            array.push(start);
-        }
-
-        console.log(array);
-        console.log('nots cal');
-        array.forEach(ele => {
-            timeslots.forEach(e => {
-                if (e.time == ele) {
-                    if (e.status == "n") {
-
-                    } else {
-                        pass = false;
-                    }
-                }
-            });
-        });
-    }
-    multipleblocking(start);
-
-    if (pass) {
-
-        for (let i = 0; i < array.length; i++) {
-            blocking(array[i]);
-        }
-
-        function blocking(start) {
-            timeslots.forEach(e => {
-
-                if (e.time == start) {
-                    if (employeecount < e.count + 1) {
-                        console.log('booking prevention');
-                        e.status = "b";
-                        console.log(e.status);
-                        e.count = e.count + 1;
-                        console.log(e);
-                    } else {
-                        e.count = e.count + 1;
-                        if (employeecount < e.count + 1) {
-                            e.status = "b";
-                        }
-
-                    }
-                }
-            });
-        }
-
-        console.log('successfully booked');
-        res.status(201).json({ "success": true });
-
-        TimeSlot.findByIdAndUpdate(
-            { _id: timeslots1[0]._id },
-            {
-                $set:
-                {
-                    times: timeslots
-                }
-            }
-        ).then(async (data, err) => {
-            if (err) {
-                // console.log(err);
-            } else {
-                const newBooking = new Booking({
-                    start,
-                    end,
-                    storeid,
-                    serviceid,
-                    userid,
-                    price,
-                    date,
-                    servicename,
-                    storename,
-                    img,
-                    username: user.name
-                });
-    
-                const savedBooking = await newBooking.save();
-                // console.log(data);
-
-                const newNoti = new Noti({
-                    title: "New Booking Arrived",
-                    message: `${user.name} is booked ${servicename} at ${start} on ${date} `,
-                    storeid: storeid
-                });
-                const noti = await newNoti.save();
-                let owner = await Owner.findOne({ _id: store.id });
-                console.log(owner);
-                
-                let data = {
-                    token:owner.deviceid,
-                    title: `${user.name} is booked ${servicename} at ${start} on ${date} `,
-                    body: "New Booking Arrived",
-                }
-                sendNoty(data);
-
-            }
-        })
+    let store = await Store.findOne({ _id: storeid });
+    if (store.working == "off") {
+        console.log('store is currently not working');
+        res.status(201).json({ "success": false, "status": "store closed" });
     } else {
-        console.log('successfulkly prevented');
-        res.status(201).json({ "success": false });
+
+
+        console.log("store \n\n\n", store);
+        let endtime = addMinutesToTimeString(start, service.duration);
+        let user = await User.findOne({ _id: userid });
+
+        end = endtime;
+
+        let employeecount = parseInt(store.employees);
+
+        console.log("employee count", employeecount);
+        console.log(" endtime", end);
+
+        //Checking count status 
+
+        let timeslots1 = await TimeSlot.find({ storeid: storeid, date: date }).select('times').select('date');
+        let timeslots = timeslots1[0].times;
+        console.log("firstdate", timeslots1);
+        console.log("firstdateid", timeslots1[0]._id);
+
+        let pass = true;
+        let array = [];
+
+        function multipleblocking(start) {
+            let nots = service.duration / 5
+            nots = Math.ceil(nots);
+            array.push(start);
+            for (let index = 0; index < nots - 1; index++) {
+                start = addMinutesToTimeString(start, 5);
+                array.push(start);
+            }
+
+            console.log(array);
+            console.log('nots cal');
+            array.forEach(ele => {
+                timeslots.forEach(e => {
+                    if (e.time == ele) {
+                        if (e.status == "n") {
+
+                        } else {
+                            pass = false;
+                        }
+                    }
+                });
+            });
+        }
+        multipleblocking(start);
+
+        if (pass) {
+
+            for (let i = 0; i < array.length; i++) {
+                blocking(array[i]);
+            }
+
+            function blocking(start) {
+                timeslots.forEach(e => {
+
+                    if (e.time == start) {
+                        if (employeecount < e.count + 1) {
+                            console.log('booking prevention');
+                            e.status = "b";
+                            console.log(e.status);
+                            e.count = e.count + 1;
+                            console.log(e);
+                        } else {
+                            e.count = e.count + 1;
+                            if (employeecount < e.count + 1) {
+                                e.status = "b";
+                            }
+
+                        }
+                    }
+                });
+            }
+
+            console.log('successfully booked');
+            res.status(201).json({ "success": true });
+
+            TimeSlot.findByIdAndUpdate(
+                { _id: timeslots1[0]._id },
+                {
+                    $set:
+                    {
+                        times: timeslots
+                    }
+                }
+            ).then(async (data, err) => {
+                if (err) {
+                    // console.log(err);
+                } else {
+                    const newBooking = new Booking({
+                        start,
+                        end,
+                        storeid,
+                        serviceid,
+                        userid,
+                        price,
+                        date,
+                        servicename,
+                        storename,
+                        img,
+                        username: user.name
+                    });
+
+                    const savedBooking = await newBooking.save();
+                    // console.log(data);
+
+                    const newNoti = new Noti({
+                        title: "New Booking Arrived",
+                        message: `${user.name} is booked ${servicename} at ${start} on ${date} `,
+                        storeid: storeid
+                    });
+                    const noti = await newNoti.save();
+                    let owner = await Owner.findOne({ _id: store.id });
+                    console.log(owner);
+
+                    let data = {
+                        token: owner.deviceid,
+                        title: `${user.name} is booked ${servicename} at ${start} on ${date} `,
+                        body: "New Booking Arrived",
+                    }
+                    sendNoty(data);
+
+                }
+            })
+        } else {
+            console.log('successfulkly prevented');
+            res.status(201).json({ "success": false });
+        }
+
+        // let test = await TimeSlot.findOne(timeslots1._id);
+        // console.log("new date", test);
+        // console.log("firstdateid",timeslots1[0]._id);
+
     }
-
-    // let test = await TimeSlot.findOne(timeslots1._id);
-    // console.log("new date", test);
-    // console.log("firstdateid",timeslots1[0]._id);
-
-   
 }
 
 export const book = async (req, res) => {
@@ -432,14 +438,14 @@ export const cancelbooking = async (req, res) => {
 
         await Booking.deleteOne({ _id: id });
 
-        let service = await Service.findOne({ _id:obj.serviceid });
+        let service = await Service.findOne({ _id: obj.serviceid });
 
         let employeecount = parseInt(store.employees);
         let timeslots1 = await TimeSlot.find({ storeid: obj.storeid, date: obj.date }).select('times').select('date');
         let timeslots = timeslots1[0].times;
         console.log("firstdate", timeslots1);
         console.log("firstdateid", timeslots1[0]._id);
-    
+
         let pass = true;
         let array = [];
 
@@ -451,7 +457,7 @@ export const cancelbooking = async (req, res) => {
                 start = addMinutesToTimeString(start, 5);
                 array.push(start);
             }
-    
+
             console.log(array);
             console.log('nots cal');
             array.forEach(ele => {
@@ -459,7 +465,7 @@ export const cancelbooking = async (req, res) => {
                     if (e.time == ele) {
                         e.count = e.count - 1;
                         if (e.status = "b") {
-                        e.status = "n"
+                            e.status = "n"
                         }
                     }
                 });
@@ -538,12 +544,12 @@ export const getTimeSlots = async (req, res) => {
 };
 
 async function firstbooking(storeid, date) {
-    console.log(' storeid ',storeid);
-    let store = await Store.findOne({ _id:storeid }).select('-createdAt').select('-__v').select('-updatedAt');
-    console.log(' store ',store);
+    console.log(' storeid ', storeid);
+    let store = await Store.findOne({ _id: storeid }).select('-createdAt').select('-__v').select('-updatedAt');
+    console.log(' store ', store);
 
     let time = convertToTime(store.start);
-    console.log("time old",time);
+    console.log("time old", time);
     // console.log("time1",time1);
 
     const startTime = new Date(`2023-02-25T${convertToTime(store.start)}`);
@@ -556,25 +562,25 @@ async function firstbooking(storeid, date) {
     let times = [];
 
     for (let hour = 0; hour < 12 * diffHours; hour = hour + 1) {
-        
+
         let obj = {
             time: time,
             count: 0,
             status: "n"
         }
         time = addMinutesToTimeString(time, 5)
-        console.log(" time new",time);
+        console.log(" time new", time);
         times.push(obj);
-        console.log(" obj",obj);
+        console.log(" obj", obj);
     }
-    console.log("times",times);
+    console.log("times", times);
     const newTimeSlot = new TimeSlot({
         date,
         storeid,
         times
     });
     const savedTimeSlot = await newTimeSlot.save();
-    console.log("savedtimes",savedTimeSlot);
+    console.log("savedtimes", savedTimeSlot);
     return savedTimeSlot;
 }
 

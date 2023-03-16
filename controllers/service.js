@@ -304,13 +304,12 @@ export const searchServices = async (req, res) => {
 
                 objects.forEach(store => {
                     store.distance = calculateDistance(userLat, userLng, store.latitude, store.longitude);
-
                 });
 
                 // Sort the shops based on their distance
                 objects.sort((a, b) => a.distance - b.distance);
 
-                // // console.log(objects);
+                console.log(objects);
 
                 res.json(objects);
             });

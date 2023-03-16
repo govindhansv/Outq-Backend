@@ -20,7 +20,8 @@ export const register = async (req, res) => {
             longitude,
             latitude,
             pincode,
-            gender
+            gender,
+            working
         } = req.body;
         if (img == "") {
             img = "https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
@@ -40,7 +41,8 @@ export const register = async (req, res) => {
             longitude,
             latitude,
             pincode,
-            gender
+            gender,
+            working
             // ownerf:owner.firstName,
             // ownerl:owner.lastName,
         });
@@ -98,26 +100,24 @@ export const getStore = async (req, res) => {
     try {
         const { storeId } = req.params;
         const store = await Store.findById(storeId);
-        // store.views.push(" f");
 
-        // store.views = store.views + 1;
+        store.bookedtimes.push(" f");
 
-        // Store.findByIdAndUpdate(
-        //     { _id: storeId },
-        //     {
-        //         $set:
-        //         {
-        //             followerslist: store.followerslist
-        //         }
-        //     }
-        // ).then(async (data, err) => {
-        //     if (err) {
-        //         // console.log(err);
-        //     } else {
-        //         // console.log(data);
-        //     }
-            
-        // })
+        Store.findByIdAndUpdate(
+            { _id: storeId },
+            {
+                $set:
+                {
+                    bookedtimes: store.bookedtimes
+                }
+            }
+        ).then(async (data, err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(data);
+            }
+        })
 
         res.status(201).json(store);
     } catch (err) {
@@ -260,6 +260,7 @@ export const queryStore = async (req, res) => {
 export const updateStore = async (req, res) => {
     // // // console.log('called');
     try {
+        const { id,status } = req.params;
 
         Store.findByIdAndUpdate(req.params.id,
             { $set: req.body },
@@ -273,6 +274,39 @@ export const updateStore = async (req, res) => {
                     res.status(201).json({ status: true, data: data });
                 }
             });
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
+
+// UPDATE STORE
+export const working = async (req, res) => {
+    // // console.log('called');
+    try {
+        
+        console.log(req.params);
+        let store = await Store.findById(req.params.storeid);
+        let status;
+        if (store.working =='on') {
+            status = 'off';
+        } else {
+            status = 'on';
+        }
+        
+        Store.findByIdAndUpdate({ _id:req.params.storeid },
+            { working: status },{new:true},
+            function (err, data) {
+                if (err) {
+                    console.log(err);
+                    res.status(201).json({ status: false, err: err });
+                }
+                else {
+                    console.log(data);
+                    res.status(201).json({ status: true, data: data });
+                }
+            });
+        
     } catch (err) {
         res.status(404).json({ message: err.message });
     }

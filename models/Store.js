@@ -71,6 +71,10 @@ const StoreSchema = new mongoose.Schema(
     gender: {
       type: String,
     },
+    working: {
+      type: String,
+      default:"on"
+    },
     followerslist: {
       type: Array,
       default: [],
