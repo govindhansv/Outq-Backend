@@ -7,7 +7,7 @@ import Service from "../models/Service.js";
 
 // admin.initializeApp({
 //     credential: admin.credential.cert(serviceAccount),
-// });
+// }); 
 
 // const message = {
 //     token: 'USER_DEVICE_TOKEN',
