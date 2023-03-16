@@ -86,6 +86,10 @@ const StoreSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    reviews: {
+      type: String,
+      default:"0"
+    },
   },
   { timestamps: true }
 );
