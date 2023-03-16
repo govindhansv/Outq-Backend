@@ -10,7 +10,7 @@ export const getStoreReviews = async (req, res) => {
         //     { storeid: req.params.storeid });
         
         // console.log(count.length);
-        // const id = req.params.storeid;
+        const id = req.params.storeid;
 
         // Store.findByIdAndUpdate(
         //     { _id: req.params.storeid },
