@@ -75,6 +75,12 @@ const StoreSchema = new mongoose.Schema(
       type: String,
       default:"on"
     },
+    reviews: {
+      type: String,
+    },
+    reviewcount: {
+      type: Number,
+    },
     followerslist: {
       type: Array,
       default: [],
@@ -86,10 +92,7 @@ const StoreSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    reviews: {
-      type: String,
-      default:"0"
-    },
+ 
   },
   { timestamps: true }
 );

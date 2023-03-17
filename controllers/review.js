@@ -6,27 +6,45 @@ import mongoose from "mongoose";
 // GET all reviews
 export const getStoreReviews = async (req, res) => {
     try {
-        // const count = await Review.find(
-        //     { storeid: req.params.storeid });
+        let rate = 0.0;
+        const count = await Review.find(
+            { storeid: req.params.storeid });
+        count.forEach(element => {
+            rate = rate + element.rating
+        });
+        rate = rate / count.length;
+        rate = parseFloat(rate.toFixed(2));
+        rate = rate * 2;
+        rate = Math.round(rate);
+        rate = rate / 2;
+        console.log(rate);
         
-        // console.log(count.length);
+        let length = count.length;
         const id = req.params.storeid;
 
-        // Store.findByIdAndUpdate(
-        //     { _id: req.params.storeid },
-        //     {
-        //         $set:
-        //         {
-        //             reviews: 19
-        //         }
-        //     }
-        // ).then(async (data, err) => {
-        //     if (err) {
-        //         console.log(err);
-        //     } else {
-        //         console.log(data);
-        //     }
-        // })
+        if (length ==NaN) {
+            length = 0;
+        }
+        if (rate ==NaN) {
+            rate = 0;
+        }
+
+        Store.updateOne(
+            { _id: req.params.storeid },
+            {
+                $set:
+                {
+                    reviews: rate,
+                    reviewcount:length
+                }
+            }
+        ).then(async (data, err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(data);
+            }
+        })
 
         Review.find({ "storeid": id })
             .then(reviews => {
@@ -38,6 +56,7 @@ export const getStoreReviews = async (req, res) => {
                 res.status(201).json({ error: err });
             });
     } catch (err) {
+        console.log("err",err);
         res.status(404).json({ message: err.message });
     }
 }
