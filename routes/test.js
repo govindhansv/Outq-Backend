@@ -1,5 +1,7 @@
 import express from "express";
+import Store from "../models/Store.js";
 import Service from "../models/Service.js";
+import geolib from 'geolib';
 
 // import { initializeApp, credential as _credential } from "firebase-admin";
 // import serviceAccount from "./outq-2b5af-firebase-adminsdk-xgart-9ae70eeb27.json?type=json";
@@ -42,26 +44,78 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
     // // console.log('called');
+    Service.find().populate('storeid').exec((err, services) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      
+        // Loop through the services and add the latitude and longitude fields
+        services.forEach(service => {
+            console.log(service);
+          service.latitude = service.storeid.latitude;
+          service.longitude = service.storeid.longitude;
+        });
+
+        Service.bulkWrite(services.map(service => ({
+            updateOne: {
+              filter: { _id: service._id },
+              update: { $set: { latitude: service.latitude, longitude: service.longitude } }
+            }
+          })), (err, result) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+        
+            console.log(result);
+        });
+        
+        // console.log(services);
+    });
+
     res.status(201).json({ message: "API Working properly fek guys... " });
 });
 
 
 
 router.get("/testing", async (req, res) => {
-    var time = "10:20 PM";
-   
-    // var AMPM = time.match(/\s(.*)$/)[1];
-    // // // console.log("10 " + AMPM);
-    var newTime = new Date(new Date("1970/01/01 " + time).getTime() + 180 * 60000).toLocaleTimeString('en-UK', { hour: '2-digit', minute: '2-digit', hour12: false });
-    // // console.log(newTime);
-    //     str2 = "05:10";
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const distance = geolib.getDistance(
+            { latitude: lat1, longitude: lon1 },
+            { latitude: lat2, longitude: lon2 }
+        );
+        return distance;
+    }
 
-    // if (str1 > str2)
-    //     // // console.log("Time 1 is later than time 2");
-    // else
-    //     // // console.log("Time 2 is later than time 1");
+    function getNearbyShops(userLat, userLon, maxDistance) {
+        return Store.find({}).lean().exec().then((shops) => {
+            // Calculate the distance between each shop and the user's location
+            // console.log(shops);
+            shops.forEach((shop) => {
+                shop.distance = calculateDistance(
+                    userLat,
+                    userLon,
+                    shop.latitude,
+                    shop.longitude,
+                );
+                console.log(shop.distance);
+            });
+
+            // Sort the shops based on their distance
+            shops.sort((a, b) => a.distance - b.distance);
+
+            // Filter the shops based on the maximum distance
+            const nearbyShops = shops.filter((shop) => shop.distance <= maxDistance);
+
+            return nearbyShops;
+        });
+    }
+        console.log("result ");
+        console.log(await getNearbyShops(9.1597267,76.7176525,100000000));
     
 });
+
 router.get("/db", async (req, res) => {
     let allservices = await Service.find({})
 

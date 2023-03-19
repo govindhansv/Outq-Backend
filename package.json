@@ -7,6 +7,7 @@
     "express": "^4.18.2",
     "express-handlebars": "^6.0.7",
     "firebase-admin": "^11.5.0",
+    "geolib": "^3.3.3",
     "gridfs-stream": "^1.1.1",
     "hbs": "^4.2.0",
     "helmet": "^6.0.1",
