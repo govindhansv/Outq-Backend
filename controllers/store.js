@@ -48,7 +48,7 @@ export const register = async (req, res) => {
         });
         const store = await newStore.save();
         // const stores = await Store.find({ownerId:ownerId});
-        // // // console.log(store);
+        console.log("store",store);
         // res.status(201).json({ store:store, stores:stores });
         res.status(201).json({ success: true, store: store });
     } catch (err) {
@@ -312,3 +312,28 @@ export const working = async (req, res) => {
     }
 };
 
+
+/* LOGGING IN */
+export const storelocation = async (req, res) => {
+    console.log('called');
+    try {
+      const { location, longitude, latitude } = req.body;
+      console.log(location, longitude, latitude,req.params.storeid);
+      Store.findByIdAndUpdate(req.params.storeid,
+        { $set: req.body },
+        function (err, data) {
+          if (err) {
+            res.status(501).json({ status: false, err: err });
+          }
+          else {
+              console.log(data);
+            res.status(201).json({ status: true, data: data });
+          }
+        });
+      // res.status(201).json([{ "id": userid }]);
+    } catch (err) {
+      // console.log(err);
+      res.status(500).json({ error: true });
+    }
+  };
+  
