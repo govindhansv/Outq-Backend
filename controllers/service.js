@@ -141,7 +141,7 @@ export const getAllService = async (req, res) => {
             }
          
         ])
-        console.log(services);
+        // console.log(services);
         // services.reverse();
         // const stores = await Store.find({}).select('-__v').select('-updatedAt');
         services.forEach(element => {

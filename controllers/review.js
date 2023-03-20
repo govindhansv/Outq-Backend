@@ -6,32 +6,34 @@ import mongoose from "mongoose";
 // GET all reviews
 export const getStoreReviews = async (req, res) => {
     try {
-        // let rate = 0.0;
-        // const count = await Review.find(
-        //     { "storeid": req.params.storeid });
-        // count.forEach(element => {
-        //     rate = rate + element.rating
-        // });
-        // rate = rate / count.length;
-        // rate = parseFloat(rate.toFixed(2));
-        // rate = rate * 2;
-        // rate = Math.round(rate);
-        // rate = rate / 2;
-        // console.log(rate);
+        let rate = 0.0;
+        const count = await Review.find(
+            { "storeid": req.params.storeid });
+        count.forEach(element => {
+            rate = rate + element.rating
+        });
+        rate = rate / count.length;
+        rate = parseFloat(rate.toFixed(2));
+        rate = rate * 2;
+        rate = Math.round(rate);
+        rate = rate / 2;
+        console.log(rate);
         
-        // let length = count.length;
-        // const id = req.params.storeid;
-        // // console.log(length);
-        // // console.log(rate);
-        // console.log(' gftd');
-        // if (length ==NaN) {
-        //     length = 0;
-        // }
-        // if (rate ==NaN) {
-        //     rate = 0;
-        // }
-        // console.log(' gftdqqqqqqqq');
-        // console.log(req.params.storeid);
+        let length = count.length;
+        const id = req.params.storeid;
+        console.log(' gftd');
+        console.log("lb",length);
+        console.log("rb",rate);
+        if (length ==NaN) {
+            length = 0;
+        }
+        if (rate ==NaN) {
+            rate = 0;
+        }
+        console.log("l",length);
+        console.log("r",rate);
+        console.log(' gftdqqqqqqqq');
+        console.log(req.params.storeid);
 
         // Store.updateOne(
         //     { _id: req.params.storeid },
@@ -50,7 +52,7 @@ export const getStoreReviews = async (req, res) => {
         //     }
         // })
 
-        Review.find({})
+        Review.find({"storeid": req.params.storeid})
             .then(reviews => {
                 // console.log(" reviews \n", reviews);
                 reviews.reverse();
