@@ -4,21 +4,17 @@ const ServiceSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
       min: 2,
       max: 50,
     },
     description: {
       type: String,
-      required: true,
     },
     price: {
       type: String,
-      required: true,
     },
     ogprice: {
       type: String,
-      required: true,
     },
     img: {
       type: String,
@@ -26,11 +22,9 @@ const ServiceSchema = new mongoose.Schema(
     },
     storeid: {
       type: String,
-      required: true,
     },
     ownerid: {
       type: String,
-      required: true,
     },
     duration: {
       type: String,

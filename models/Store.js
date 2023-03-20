@@ -4,7 +4,6 @@ const StoreSchema = new mongoose.Schema(
   {
     name: {
       type:String,
-      required: true,
       min: 2,
       max: 50,
     },
@@ -23,23 +22,19 @@ const StoreSchema = new mongoose.Schema(
     // },
     location: {
       type: String,
-      required: true,
       max: 50,
     },
     id: {
       type: String,
-      required: true,
       min: 2,
       max: 50,
     },
     description: {
       type: String,
-      required: true,
       max: 50,
     },
     type: {
       type: String,
-      required: true,
       max: 50,
     },
     img: {
