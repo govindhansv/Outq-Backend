@@ -48,7 +48,7 @@ export const sendNoty= (data)=>{
     };
     pkg.messaging().send(message)
         .then((response) => {
-            // console.log('Successfully sent message:', response);
+            // //console.log('Successfully sent message:', response);
             return { response: response, status: true };
         })
         .catch((error) => {
@@ -58,7 +58,7 @@ export const sendNoty= (data)=>{
 }
 
 export const notify = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const message = {
             token: 'eM_VefAKTo-jeAGU-mnBpk:APA91bHX2qtPjZR82VhnWiPbYQFN0gIDeG3oqHKTc3UfEkpMzViKqZtZlnF0jBadF-3XW6ipUKID3yc-n0O-zNg5rmO_4r7Ha1YL3SHTil3QKclUryMRQf3Wm5LBB2NE3C_ik_9a5P96',
@@ -75,7 +75,7 @@ export const notify = async (req, res) => {
 
         pkg.messaging().send(message)
             .then((response) => {
-                // console.log('Successfully sent message:', response);
+                // //console.log('Successfully sent message:', response);
             })
             .catch((error) => {
                 console.error('Error sending message:', error);
@@ -83,32 +83,32 @@ export const notify = async (req, res) => {
 
         res.status(201).json(message);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 
 export const ocreate = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let { storeid } = req.params;
         let notis = await Noti.find({"storeid":storeid})
         res.status(201).json(notis);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const ucreate = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let { userid } = req.params;
         let notis = await Noti.find({"userid":userid})
         res.status(201).json(notis);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -124,7 +124,7 @@ export const ucreate = async (req, res) => {
 
 
 export const userFetch = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let { userid, deviceid } = req.params;
         const newDeviceid = new Deviceid({
@@ -135,13 +135,13 @@ export const userFetch = async (req, res) => {
         let newdeviceid = newDeviceid.save();
         res.status(201).json(newdeviceid);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const ownerFetch = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let { storeid, deviceid } = req.params;
         const newDeviceid = new Deviceid({
@@ -152,7 +152,7 @@ export const ownerFetch = async (req, res) => {
         let newdeviceid = newDeviceid.save();
         res.status(201).json(newdeviceid);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };

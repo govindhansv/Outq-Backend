@@ -21,7 +21,7 @@ function convertToTime(timeString) {
         return `${hours}:${minutes}`;
     }
 
-    // console.log(convertTime12to24(timeString));
+    // //console.log(convertTime12to24(timeString));
     let time = convertTime12to24(timeString);
 
     return time;
@@ -49,7 +49,7 @@ function addMinutesToTimeString(timeString, minutesToAdd) {
 
 export const register = async (req, res) => {
     try {
-        // // console.log(req.body);
+        // // //console.log(req.body);
         const {
             name,
             location,
@@ -85,7 +85,7 @@ export const register = async (req, res) => {
         });
 
         const store = await newStore.save();
-        // console.log(store);
+        // //console.log(store);
 
         let time = convertToTime(start);
         let time1 = convertToTime(start);
@@ -100,7 +100,7 @@ export const register = async (req, res) => {
         // Calculate the difference in hours as an integer
         const diffHours = Math.floor((endTime.getTime() - startTime.getTime()) / 3600000);
 
-        // console.log(diffHours); // Output: 7
+        // //console.log(diffHours); // Output: 7
 
 
         for (let hour = 0; hour < diffHours; hour = hour + 1) {
@@ -132,13 +132,13 @@ export const register = async (req, res) => {
             await newTime.save();
             time1 = addMinutesToTimeString(time1, 60);
         }
-        // console.log(timearray);
+        // //console.log(timearray);
 
       
 
 
         // const stores = await Store.find({ownerId:ownerId});
-        // // console.log(store);
+        // // //console.log(store);
         // res.status(201).json({ store:store, stores:stores });
         res.status(201).json({ success: true, store: store });
         // res.status(409).json({ error: err.message });
@@ -176,7 +176,7 @@ function convertToTime(timeString) {
         return `${hours}:${minutes}`;
     }
 
-    // console.log(convertTime12to24(timeString));
+    // //console.log(convertTime12to24(timeString));
     let time = convertTime12to24(timeString);
 
     return time;
@@ -205,7 +205,7 @@ function addMinutesToTimeString(timeString, minutesToAdd) {
 
 /* Create new booking order */
 export const book = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let {
             start,
@@ -227,8 +227,8 @@ export const book = async (req, res) => {
         end = endtime;
 
         let employeecount = parseInt(store.employees);
-        // console.log("employee count", employeecount);
-        // console.log(" endtime", end);
+        // //console.log("employee count", employeecount);
+        // //console.log(" endtime", end);
 
 
         const timeslots = await Time.find({ storeid: storeid }).select('start').select('end').select('date').select('times');
@@ -236,7 +236,7 @@ export const book = async (req, res) => {
 
         var count = 0;
 
-        // console.log("Started counting", count);
+        // //console.log("Started counting", count);
 
         timeslots.forEach(element => {
 
@@ -248,7 +248,7 @@ export const book = async (req, res) => {
             }
         });
 
-        // console.log(" count is equal to ", count);
+        // //console.log(" count is equal to ", count);
 
 
         if (employeecount < count + 1) {
@@ -257,7 +257,7 @@ export const book = async (req, res) => {
 
 
         if (err) {
-            // console.log(' Already booked');
+            // //console.log(' Already booked');
             res.status(500).json({ "success": false });
         } else {
 
@@ -284,7 +284,7 @@ export const book = async (req, res) => {
         }
 
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: true });
     }
 };
@@ -293,7 +293,7 @@ export const book = async (req, res) => {
 
 /* Create new booking order */
 export const booking = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let {
             start,
@@ -307,28 +307,28 @@ export const booking = async (req, res) => {
             storename,
             img,
         } = req.body;
-        // console.log(req.body);
+        // //console.log(req.body);
         let service = await Service.findOne({ serviceid });
-        // console.log(service);
+        // //console.log(service);
         end = start;
 
         let user = await User.findOne({ userid });
-        // // console.log(" user \n\n\n\n" ,user.name);
+        // // //console.log(" user \n\n\n\n" ,user.name);
 
-        // console.log(req.body);
+        // //console.log(req.body);
 
         const timeslots = await TimeSlot.find({ serviceid: serviceid }).select('start').select('date');
 
         const store = await Store.find({ _id: storeid });
-        // console.log(" store", store);
+        // //console.log(" store", store);
 
         const time = await TimeSlot.find({ serviceid: serviceid, start: start });
 
-        // console.log("d", time.length);
+        // //console.log("d", time.length);
         var err;
-        // console.log("emp", store[0].employees);
+        // //console.log("emp", store[0].employees);
         let employeecount = parseInt(store[0].employees);
-        // console.log("fgd", employeecount);
+        // //console.log("fgd", employeecount);
 
 
         timeslots.forEach(element => {
@@ -344,7 +344,7 @@ export const booking = async (req, res) => {
             res.status(500).json({ "success": false });
 
         } else {
-            // console.log(" hell ");
+            // //console.log(" hell ");
 
             const newBooking = new Booking({
                 start,
@@ -379,7 +379,7 @@ export const booking = async (req, res) => {
 
 
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(201).json({ "success": false });
 
     }
@@ -389,62 +389,62 @@ export const booking = async (req, res) => {
 /* View User Booking */
 
 export const viewall = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const { userid } = req.params;
         const bookings = await Booking.find({ "userid": userid }).select('-createdAt').select('-__v').select('-updatedAt');
         bookings.forEach(element => {
-            // // console.log(element);
+            // // //console.log(element);
             element.bookingid = element._id;
             // element.username = element._id;
         });
-        // console.log(" nbooking ");
-        // console.log(bookings);
+        // //console.log(" nbooking ");
+        // //console.log(bookings);
         res.status(201).json(bookings);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const storebooking = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const { storeid } = req.params;
         const bookings = await Booking.find({ "storeid": storeid }).select('-createdAt').select('-__v').select('-updatedAt');
         bookings.forEach(element => {
-            // // console.log(element);
+            // // //console.log(element);
             element.bookingid = element._id;
         });
-        // console.log(bookings);
+        // //console.log(bookings);
         res.status(201).json(bookings);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const viewsingle = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const { id } = req.params;
         const booking = await Booking.find({ id }).select('-createdAt').select('-__v').select('-updatedAt');
         res.status(201).json(booking);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const cancelbooking = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const { id } = req.params;
 
         let obj = await Booking.findOne({ _id: id });
         let store = await Store.findOne({ _id: obj.storeid });
-        // console.log(obj);
-        // console.log(store);
+        // //console.log(obj);
+        // //console.log(store);
 
         const newOrder = new Order({
             start: obj.start,
@@ -465,45 +465,45 @@ export const cancelbooking = async (req, res) => {
         await Booking.deleteOne({ _id: id });
 
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 
 export const getTimeSlots = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         // find time slots based on store id not on service id
 
         const { storeid, date } = req.params;
-        // console.log(storeid, date);
+        // //console.log(storeid, date);
         const timeslots = await Time.find({ storeid: storeid, date: date }).select('start').select('end').select('date').select('times');
-        // console.log(timeslots);
+        // //console.log(timeslots);
         res.status(201).json(timeslots);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 // export const getTimeSlots = async (req, res) => {
-//     // console.log('called');
+//     // //console.log('called');
 //     try {
 //         // find time slots based on store id not on service id
 
 //         const { storeid, date } = req.params;
-//         // console.log(storeid, date);
+//         // //console.log(storeid, date);
 //         const timeslots = await TimeSlot.find({ storeid: storeid, date: date }).select('start').select('end').select('date');
-//         // console.log(timeslots);
+//         // //console.log(timeslots);
 //         let times = [];
 //         timeslots.forEach(element => {
 //             times.push({ start: element.start, end: element.end, date: element.date })
 //         });
-//         // console.log(times);
+//         // //console.log(times);
 //         res.status(201).json(times);
 //     } catch (err) {
-//         // console.log("err", err);
+//         // //console.log("err", err);
 //         res.status(500).json({ error: err.message });
 //     }
 // };

@@ -13,11 +13,11 @@ export const services = async (req, res) => {
     // let store = await Store.findById(storeid);
 
     let services = await Service.find({ "storeid": storeid }).select('_id').select('name');
-    // console.log(services);
+    // //console.log(services);
     let serviceNames = services.map(service => service.name);
     let serviceIds = services.map(service => service._id.toString());
-    // console.log(serviceNames);
-    // console.log(serviceIds);
+    // //console.log(serviceNames);
+    // //console.log(serviceIds);
     // let servicesdata = [];
     // for (let i = 0; i < serviceIds.length; i++) {
       let orderCounts = await Promise.all(serviceIds.map(async (serviceId, index) => {
@@ -29,32 +29,32 @@ export const services = async (req, res) => {
       }));
     orderCounts  = orderCounts.sort((a, b) => a.count - b.count);
     // servicesdata = orderCounts.filter(({ count }) => count > 0);
-    // console.log(" sc", servicesdata);
+    // //console.log(" sc", servicesdata);
     // for (let i = 0; i < serviceIds.length; i++) {
     //   let orders = await Order.find({ "serviceid": serviceIds[i] }).countDocuments()
-    //   // console.log(orders);
+    //   // //console.log(orders);
     //   servicesdata = servicesdata.concat([{ name: serviceNames[i], count: orders }]);
     // }
-    // console.log(servicesdata);
+    // //console.log(servicesdata);
     res.json(orderCounts);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json({ error: true });
   }
 };
 
 export const fetch = async (req, res) => {
-  console.log('dash called');
+  //console.log('dash called');
   try {
     let { storeid, today, yesterday } = req.params;
     // storeid = "64082ee0cd603a2fb02cdbc6";
-    // console.log(today, yesterday);
+    // //console.log(today, yesterday);
     const torders = await Order.find({ "storeid": storeid, "date": today, "status": "Success" }).select('-createdAt').select('-__v').select('-updatedAt');
     const yorders = await Order.find({ "storeid": storeid, "date": yesterday, "status": "Success" }).select('-createdAt').select('-__v').select('-updatedAt');
     let growth = ((torders.length - yorders.length) / torders.length) * 100;
     growth = growth.toFixed(2);
-    // console.log(torders);
-    // console.log(yorders);
+    // //console.log(torders);
+    // //console.log(yorders);
 
 
     let ttotalorders = await Order.find({ "storeid": storeid, "date": today }).select('-createdAt').select('-__v').select('-updatedAt');
@@ -76,7 +76,7 @@ export const fetch = async (req, res) => {
       tfailureorders = 0;
     }
 
-    // console.log(ttotalorders);
+    // //console.log(ttotalorders);
     // let totalorders = await Order.find({ "storeid": storeid }).select('-createdAt').select('-__v').select('-updatedAt');
     // let sucessorders = await Order.find({ "storeid": storeid, "status": "Success" }).select('-createdAt').select('-__v').select('-updatedAt');
     // let failureorders = await Order.find({ "storeid": storeid, "status": "Cancelled" }).select('-createdAt').select('-__v').select('-updatedAt');
@@ -84,8 +84,8 @@ export const fetch = async (req, res) => {
     let storedata = await Store.findById(storeid);
     let storeview = storedata.bookedtimes.length;
     let followers = storedata.followerslist.length;
-    // console.log(storedata);
-    // console.log(followers);
+    // //console.log(storedata);
+    // //console.log(followers);
     if (storeview >= 0) {
 
     } else {
@@ -96,19 +96,15 @@ export const fetch = async (req, res) => {
     } else {
       followers = 0;
     }
-    console.log(
-      " followersw", followers
-    );
+    console.log(" followersw", followers);
 
-
-    
 
     res.status(201).json({ t: torders.length, y: yorders.length, growth: growth, followers: followers, orders: [ttotalorders, tsucessorders, tfailureorders],storeview:storeview});
 
     // let order = { "_id": { "$oid": "640836048d2f97da954b7880" }, "start": "9:00", "end": "10:00 AM", "storeid": "64082ee0cd603a2fb02cdbc6", "serviceid": "64083378cd603a2fb02cdc22", "userid": "6408353d8d2f97da954b7861", "price": "3000", "date": "2023-03-08", "servicename": "Hydra facial cleanup", "storename": "SKY BEAUTY CARE ", "status": "Success", "__v": { "$numberInt": "0" } }
 
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json({ error: true });
   }
 };

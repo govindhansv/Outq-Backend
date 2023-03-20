@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 
 export const register = async (req, res) => {
     try {
-        // // // console.log(req.body);
+        // // // //console.log(req.body);
         let {
             name,
             location,
@@ -52,7 +52,7 @@ export const register = async (req, res) => {
         });
         const store = await newStore.save();
         // const stores = await Store.find({ownerId:ownerId});
-        console.log("store",store);
+        //console.log("store",store);
         // res.status(201).json({ store:store, stores:stores });
         const review = new Review({
             _id: new mongoose.Types.ObjectId(),
@@ -75,16 +75,16 @@ export const register = async (req, res) => {
 export const getOwnerStores = async (req, res) => {
     try {
         const { ownerId } = req.params;
-        // // // console.log(ownerId);
+        // // // //console.log(ownerId);
         const stores = await Store.find({ id: ownerId }).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-followerscount').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
-        // // // console.log(stores);;
-        // // // console.log(stores);;
-        // // // console.log(stores);
+        // // // //console.log(stores);;
+        // // // //console.log(stores);;
+        // // // //console.log(stores);
         stores.forEach(element => {
-            // // // console.log(element);
+            // // // //console.log(element);
             element.type = element._id;
         });
-        // // // console.log(stores);
+        // // // //console.log(stores);
         res.status(201).json(stores);
     } catch (err) {
         res.status(404).json({ message: err.message });
@@ -95,14 +95,51 @@ export const getOwnerStores = async (req, res) => {
 export const getAllStore = async (req, res) => {
     try {
         let stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
-        // // // console.log(stores);;
-        // stores.reverse();
+        // // // //console.log(stores);;
+        stores.reverse();
+      
+        // // //console.log(stores);
+        // function calculateDistance(lat1, lon1, lat2, lon2) {
+        //     const distance = geolib.getDistance(
+        //         { latitude: lat1, longitude: lon1 },
+        //         { latitude: lat2, longitude: lon2 }
+        //     );
+        //     return distance;
+        // }
+    
+        // function getNearbyShops(userLat, userLon, maxDistance) {
+        //     return Store.find({}).lean().exec().then((shops) => {
+        //         // Calculate the distance between each shop and the user's location
+        //         // //console.log(shops);
+        //         shops.forEach((shop) => {
+        //             shop.distance = calculateDistance(
+        //                 userLat,
+        //                 userLon,
+        //                 shop.latitude,
+        //                 shop.longitude,
+        //             );
+        //             //console.log(shop.distance);
+        //         });
+    
+        //         // Sort the shops based on their distance
+        //         shops.sort((a, b) => a.distance - b.distance);
+    
+        //         // Filter the shops based on the maximum distance
+        //         const nearbyShops = shops.filter((shop) => shop.distance <= maxDistance);
+    
+        //         return nearbyShops;
+        //     });
+        // }
 
         stores.forEach(element => {
-            // // // console.log(element);
+            // // // //console.log(element);
             element.type = element._id;
         });
-        // // console.log(stores);
+
+        // let stores = await getNearbyShops(9.1597267, 76.7176525, 100000000);
+        // //console.log("result ");
+        // //console.log(await getNearbyShops(9.1597267, 76.7176525, 100000000));
+        
         res.status(201).json(stores);
     } catch (err) {
         res.status(404).json({ message: err.message });
@@ -127,15 +164,15 @@ export const getStore = async (req, res) => {
             }
         ).then(async (data, err) => {
             if (err) {
-                console.log(err);
+                //console.log(err);
             } else {
-                console.log(data);
+                //console.log(data);
             }
         })
-        console.log(store);
+        //console.log(store);
         res.status(201).json(store);
     } catch (err) {
-        // // console.log(err);
+        // // //console.log(err);
         res.status(404).json({ message: err.message });
     }
 };
@@ -162,7 +199,7 @@ export const delStore = async (req, res) => {
 export const searchStore = async (req, res) => {
     try {
         const { query } = req.params;
-        // // console.log(" query ", query);
+        // // //console.log(" query ", query);
         Store.find({ name: { $regex: query, $options: 'i' } })
             .sort({ name: 'asc' })
             .exec((err, objects) => {
@@ -170,7 +207,7 @@ export const searchStore = async (req, res) => {
                     return res.status(500).send(err);
                 }
                 objects.forEach(element => {
-                    // // // console.log(element);
+                    // // // //console.log(element);
                     element.type = element._id;
                 });
                 res.json(objects);
@@ -183,7 +220,7 @@ export const searchStore = async (req, res) => {
         //             return res.status(500).send(err);
         //         }
         //         objects.forEach(element => {
-        //             // // // console.log(element);
+        //             // // // //console.log(element);
         //             element.type = element._id;
         //         });
         //         res.json( objects);
@@ -201,7 +238,7 @@ export const searchStore = async (req, res) => {
 //   QUERY STORE
 
 export const queryStore = async (req, res) => {
-    console.log('called');
+    //console.log('called');
     try {
         const { query } = req.params;
 
@@ -218,7 +255,7 @@ export const queryStore = async (req, res) => {
                         let a = [];
 
                         objects.forEach(element => {
-                            // // // console.log(element);
+                            // // // //console.log(element);
                             element.type = element._id;
                             a.push(element._id);
                         });
@@ -246,7 +283,7 @@ export const queryStore = async (req, res) => {
                         let a = [];
 
                         objects.forEach(element => {
-                            // // // console.log(element);
+                            // // // //console.log(element);
                             element.type = element._id;
                             a.push(element._id);
                         });
@@ -265,14 +302,14 @@ export const queryStore = async (req, res) => {
 
 
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         res.status(501).json({ message: "ERR ", ERR: err });
     }
 };
 
 // UPDATE STORE
 export const updateStore = async (req, res) => {
-    // // // console.log('called');
+    // // // //console.log('called');
     try {
         const { id,status } = req.params;
 
@@ -280,11 +317,11 @@ export const updateStore = async (req, res) => {
             { $set: req.body },
             function (err, data) {
                 if (err) {
-                    // // // console.log(err);
+                    // // // //console.log(err);
                     res.status(201).json({ status: false, err: err });
                 }
                 else {
-                    // // // console.log(data);
+                    // // // //console.log(data);
                     res.status(201).json({ status: true, data: data });
                 }
             });
@@ -296,10 +333,10 @@ export const updateStore = async (req, res) => {
 
 // UPDATE STORE
 export const working = async (req, res) => {
-    // // console.log('called');
+    // // //console.log('called');
     try {
         
-        console.log(req.params);
+        //console.log(req.params);
         let store = await Store.findById(req.params.storeid);
         let status;
         if (store.working =='on') {
@@ -312,11 +349,11 @@ export const working = async (req, res) => {
             { working: status },{new:true},
             function (err, data) {
                 if (err) {
-                    console.log(err);
+                    //console.log(err);
                     res.status(201).json({ status: false, err: err });
                 }
                 else {
-                    console.log(data);
+                    //console.log(data);
                     res.status(201).json({ status: true, data: data });
                 }
             });
@@ -329,10 +366,10 @@ export const working = async (req, res) => {
 
 /* LOGGING IN */
 export const storelocation = async (req, res) => {
-    console.log('called');
+    //console.log('called');
     try {
       const { location, longitude, latitude } = req.body;
-      console.log(location, longitude, latitude,req.params.storeid);
+      //console.log(location, longitude, latitude,req.params.storeid);
       Store.findByIdAndUpdate(req.params.storeid,
         { $set: req.body },
         function (err, data) {
@@ -340,13 +377,13 @@ export const storelocation = async (req, res) => {
             res.status(501).json({ status: false, err: err });
           }
           else {
-              console.log(data);
+              //console.log(data);
             res.status(201).json({ status: true, data: data });
           }
         });
       // res.status(201).json([{ "id": userid }]);
     } catch (err) {
-      // console.log(err);
+      // //console.log(err);
       res.status(500).json({ error: true });
     }
   };

@@ -22,7 +22,7 @@ export const register = async (req, res) => {
       deviceid,
       phone,
     } = req.body;
-    // // // console.log(req.body);
+    // // // //console.log(req.body);
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(pswd, salt);
 
@@ -37,32 +37,33 @@ export const register = async (req, res) => {
     
     const savedOwner = await newOwner.save();
     let ownerid = savedOwner._id.toString();
-    // // console.log(ownerid);
+    // // //console.log(ownerid);
     res.status(201).json([{"id":ownerid}]);
   } catch (err) {
-    // // console.log(err);
+    // // //console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
 
 /* LOGGING IN */
 export const login = async (req, res) => {
-  // console.log('called');
+  // //console.log('called');
 
   try {
     const { email, pswd } = req.body;
-    console.log(email,pswd);
+    //console.log(email,pswd);
     
     const owner = await Owner.findOne({ email: email });
-    console.log(owner)
+    //console.log(owner)
     if (!owner) { return res.status(400).json({ msg: "Owner does not exist. " }); 
-      console.log(' owner not found');
+      //console.log(' owner not found');
     }
     const isMatch = await bcrypt.compare(pswd, owner.password);
-    console.log(isMatch);
+    //console.log(isMatch);
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid credentials. " });
-      console.log(' invalif');}
+      // console.log(' invalif');
+    }
     
     let ownerid = owner._id.toString();
     const store = await Store.findOne({ id: ownerid });
@@ -74,11 +75,11 @@ export const login = async (req, res) => {
       
       res.status(201).json([{"id":ownerid,"storeid":"null"}]);
     }
-    // // console.log(ownerid);
-    // // console.log(store);
+    // // //console.log(ownerid);
+    // // //console.log(store);
     // res.status(201).json({ token, owner });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json({ err: "error true", error: err.message });
   }
 };

@@ -5,7 +5,7 @@ import Store from "../models/Store.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
-  // console.log('called');
+  // //console.log('called');
   try {
     const {
       // firstName,
@@ -22,8 +22,8 @@ export const register = async (req, res) => {
       
     } = req.body;
 
-    // console.log(req.body);
-    // console.log(name,email,pswd);
+    // //console.log(req.body);
+    // //console.log(name,email,pswd);
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(pswd, salt);
 
@@ -46,34 +46,34 @@ export const register = async (req, res) => {
     const savedUser = await newUser.save();
 
     let userid = savedUser._id.toString();
-    // console.log(userid);
+    // //console.log(userid);
     res.status(201).json([{ "id": userid }]);
 
     // res.status(201).json(savedUser);
   } catch (err) {
-    // console.log("err",err);
+    // //console.log("err",err);
     res.status(500).json({ error: true });
   }
 };
 
 /* LOGGING IN */
 export const login = async (req, res) => {
-  console.log('called');
+  //console.log('called');
   try {
     const { email, pswd } = req.body;
-    console.log(email, pswd);
+    //console.log(email, pswd);
     const user = await User.findOne({ email: email });
-    console.log(user);
+    //console.log(user);
     if (!user) {
       return res.status(400).json({ msg: "User does not exist. " });
-      console.log(' uaser not found');
+      //console.log(' uaser not found');
     }
 
     const isMatch = await bcrypt.compare(pswd, user.pswd);
-    console.log(isMatch);
+    //console.log(isMatch);
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid credentials. " });
-      console.log(' invalid');
+      //console.log(' invalid');
     }
 
     // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
@@ -82,10 +82,10 @@ export const login = async (req, res) => {
 
     let userid = user._id.toString();
     let userlocation = user._id;
-    // console.log(userid);
+    // //console.log(userid);
     res.status(201).json([{ "id": userid }]);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json({ error: true });
   }
 };
@@ -93,32 +93,32 @@ export const login = async (req, res) => {
 /* LOGGING IN */
 export const userlocation = async (req, res) => {
 
-  console.log('called');
+  //console.log('called');
   try {
     let id = req.params.userid;
-    console.log(id);
+    //console.log(id);
     const user = await User.findOne({ _id: id });
-    console.log(user);
+    //console.log(user);
     if (!user) {
-      console.log(' user not found');
+      //console.log(' user not found');
       return res.status(400).json({ msg: "User does not exist. " });
     }
 
     let userlocation = user.location;
-    console.log(userlocation);
+    //console.log(userlocation);
     res.status(201).json([{ "location": userlocation }]);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(500).json({ error: true });
   }
 };
 
 /* LOGGING IN */
 export const update = async (req, res) => {
-  console.log('called');
+  //console.log('called');
   try {
     const { location, longitude, latitude, pincode } = req.body;
-    // console.log(location, longitude, latitude, pincode,req.params.userid);
+    // //console.log(location, longitude, latitude, pincode,req.params.userid);
     User.findByIdAndUpdate(req.params.userid,
       { $set: req.body },
       function (err, data) {
@@ -131,7 +131,7 @@ export const update = async (req, res) => {
       });
     // res.status(201).json([{ "id": userid }]);
   } catch (err) {
-    // console.log(err);
+    // //console.log(err);
     res.status(500).json({ error: true });
   }
 };
@@ -153,7 +153,7 @@ export const getUserSavedStores = async (req, res) => {
     res.status(201).json(svdstores);
 
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(404).json({ message: err.message });
   }
 };

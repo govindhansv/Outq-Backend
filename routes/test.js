@@ -27,13 +27,13 @@ import geolib from 'geolib';
 //         var payload = { notification: { title: 'FCM using flutter and node js', body: 'we are fine now' }, data: { click_action: "FLUTTER NOTIFICATION_CLICK" } }
 //         admin.messaging().send(message)
 //         .then((response) => {
-//             // // console.log('Successfully sent message:', response);
+//             // // //console.log('Successfully sent message:', response);
 //         })
 //         .catch((error) => {
-//             // // console.log('Error sending message:', error);
+//             // // //console.log('Error sending message:', error);
 //         });
 //     } catch (error) {
-//         // // console.log(error);
+//         // // //console.log(error);
 //     }
 // }
 
@@ -43,7 +43,7 @@ const router = express.Router();
 
 
 router.get("/", (req, res) => {
-    // // console.log('called');
+    // // //console.log('called');
     Service.find().populate('storeid').exec((err, services) => {
         if (err) {
           console.error(err);
@@ -52,7 +52,7 @@ router.get("/", (req, res) => {
       
         // Loop through the services and add the latitude and longitude fields
         services.forEach(service => {
-            console.log(service);
+            //console.log(service);
           service.latitude = service.storeid.latitude;
           service.longitude = service.storeid.longitude;
         });
@@ -68,10 +68,10 @@ router.get("/", (req, res) => {
               return;
             }
         
-            console.log(result);
+            //console.log(result);
         });
         
-        // console.log(services);
+        // //console.log(services);
     });
 
     res.status(201).json({ message: "API Working properly fek guys... " });
@@ -91,7 +91,7 @@ router.get("/testing", async (req, res) => {
     function getNearbyShops(userLat, userLon, maxDistance) {
         return Store.find({}).lean().exec().then((shops) => {
             // Calculate the distance between each shop and the user's location
-            // console.log(shops);
+            // //console.log(shops);
             shops.forEach((shop) => {
                 shop.distance = calculateDistance(
                     userLat,
@@ -99,7 +99,7 @@ router.get("/testing", async (req, res) => {
                     shop.latitude,
                     shop.longitude,
                 );
-                console.log(shop.distance);
+                //console.log(shop.distance);
             });
 
             // Sort the shops based on their distance
@@ -111,8 +111,8 @@ router.get("/testing", async (req, res) => {
             return nearbyShops;
         });
     }
-        console.log("result ");
-        console.log(await getNearbyShops(9.1597267,76.7176525,100000000));
+        //console.log("result ");
+        //console.log(await getNearbyShops(9.1597267,76.7176525,100000000));
     
 });
 
@@ -126,7 +126,7 @@ router.get("/db", async (req, res) => {
 router.get("/reg", async (req, res) => {
     try {
         const stores = await Test.find();
-        // // console.log(stores);
+        // // //console.log(stores);
         res.status(201).json(stores);
     } catch (err) {
         res.status(409).json({ error: err.message });
@@ -135,8 +135,8 @@ router.get("/reg", async (req, res) => {
 
 router.post("/reg", async (req, res) => {
     try {
-        // // console.log('called');
-        // // console.log(req.body);
+        // // //console.log('called');
+        // // //console.log(req.body);
         const {
             name, pswd
         } = req.body;
@@ -147,7 +147,7 @@ router.post("/reg", async (req, res) => {
 
         const store = await newTest.save();
         const stores = await Test.find();
-        // // console.log(stores);
+        // // //console.log(stores);
 
         res.status(201).json({ data: store });
     } catch (err) {

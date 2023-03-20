@@ -28,19 +28,19 @@ export const booking = async (req, res) => {
 
     // FINDING COUNTS
 
-    console.log(req.body);
-    console.log("storeid\n", storeid);
+    //console.log(req.body);
+    //console.log("storeid\n", storeid);
     let service = await Service.findOne({ _id: serviceid });
-    console.log(service);
+    //console.log(service);
 
     let store = await Store.findOne({ _id: storeid });
     if (store.working == "off") {
-        console.log('store is currently not working');
+        //console.log('store is currently not working');
         res.status(201).json({ "success": false, "status": "store closed" });
     } else {
 
 
-        console.log("store \n\n\n", store);
+        //console.log("store \n\n\n", store);
         let endtime = addMinutesToTimeString(start, service.duration);
         let user = await User.findOne({ _id: userid });
 
@@ -48,15 +48,15 @@ export const booking = async (req, res) => {
 
         let employeecount = parseInt(store.employees);
 
-        console.log("employee count", employeecount);
-        console.log(" endtime", end);
+        //console.log("employee count", employeecount);
+        //console.log(" endtime", end);
 
         //Checking count status 
 
         let timeslots1 = await TimeSlot.find({ storeid: storeid, date: date }).select('times').select('date');
         let timeslots = timeslots1[0].times;
-        console.log("firstdate", timeslots1);
-        console.log("firstdateid", timeslots1[0]._id);
+        //console.log("firstdate", timeslots1);
+        //console.log("firstdateid", timeslots1[0]._id);
 
         let pass = true;
         let array = [];
@@ -70,8 +70,8 @@ export const booking = async (req, res) => {
                 array.push(start);
             }
 
-            console.log(array);
-            console.log('nots cal');
+            //console.log(array);
+            //console.log('nots cal');
             array.forEach(ele => {
                 timeslots.forEach(e => {
                     if (e.time == ele) {
@@ -97,11 +97,11 @@ export const booking = async (req, res) => {
 
                     if (e.time == start) {
                         if (employeecount < e.count + 1) {
-                            console.log('booking prevention');
+                            //console.log('booking prevention');
                             e.status = "b";
-                            console.log(e.status);
+                            //console.log(e.status);
                             e.count = e.count + 1;
-                            console.log(e);
+                            //console.log(e);
                         } else {
                             e.count = e.count + 1;
                             if (employeecount < e.count + 1) {
@@ -113,7 +113,7 @@ export const booking = async (req, res) => {
                 });
             }
 
-            console.log('successfully booked');
+            //console.log('successfully booked');
             res.status(201).json({ "success": true });
 
             TimeSlot.findByIdAndUpdate(
@@ -126,7 +126,7 @@ export const booking = async (req, res) => {
                 }
             ).then(async (data, err) => {
                 if (err) {
-                    // console.log(err);
+                    // //console.log(err);
                 } else {
                     const newBooking = new Booking({
                         start,
@@ -143,7 +143,7 @@ export const booking = async (req, res) => {
                     });
 
                     const savedBooking = await newBooking.save();
-                    // console.log(data);
+                    // //console.log(data);
 
                     const newNoti = new Noti({
                         title: "New Booking Arrived",
@@ -152,7 +152,7 @@ export const booking = async (req, res) => {
                     });
                     const noti = await newNoti.save();
                     let owner = await Owner.findOne({ _id: store.id });
-                    console.log(owner);
+                    //console.log(owner);
 
                     let data = {
                         token: owner.deviceid,
@@ -164,19 +164,19 @@ export const booking = async (req, res) => {
                 }
             })
         } else {
-            console.log('successfulkly prevented');
+            //console.log('successfulkly prevented');
             res.status(201).json({ "success": false });
         }
 
         // let test = await TimeSlot.findOne(timeslots1._id);
-        // console.log("new date", test);
-        // console.log("firstdateid",timeslots1[0]._id);
+        // //console.log("new date", test);
+        // //console.log("firstdateid",timeslots1[0]._id);
 
     }
 }
 
 export const book = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let {
             start,
@@ -200,15 +200,15 @@ export const book = async (req, res) => {
 
 
         let employeecount = parseInt(store.employees);
-        // console.log("employee count", employeecount);
-        // console.log(" endtime", end);
+        // //console.log("employee count", employeecount);
+        // //console.log(" endtime", end);
 
         const timeslots = await TimeSlot.find({ storeid: storeid }).select('start').select('end').select('date');
         var err = false;
 
         var count = 0;
 
-        // console.log("Started counting", count);
+        // //console.log("Started counting", count);
 
         timeslots.forEach(element => {
 
@@ -220,7 +220,7 @@ export const book = async (req, res) => {
             }
         });
 
-        // // console.log(" count is equal to ", count);
+        // // //console.log(" count is equal to ", count);
 
 
         if (employeecount < count + 1) {
@@ -229,7 +229,7 @@ export const book = async (req, res) => {
 
 
         if (err) {
-            // console.log(' Already booked');
+            // //console.log(' Already booked');
             res.status(500).json({ "success": false });
         } else {
 
@@ -262,14 +262,14 @@ export const book = async (req, res) => {
         }
 
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: true });
     }
 };
 
 /* Create new booking order */
 export const bookingdemo = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         let {
             start,
@@ -283,28 +283,28 @@ export const bookingdemo = async (req, res) => {
             storename,
             img,
         } = req.body;
-        // console.log(req.body);
+        // //console.log(req.body);
         let service = await Service.findOne({ serviceid });
-        // console.log(service);
+        // //console.log(service);
         end = start;
 
         let user = await User.findOne({ userid });
-        // // console.log(" user \n\n\n\n" ,user.name);
+        // // //console.log(" user \n\n\n\n" ,user.name);
 
-        // console.log(req.body);
+        // //console.log(req.body);
 
         const timeslots = await TimeSlot.find({ serviceid: serviceid }).select('start').select('date');
 
         const store = await Store.find({ _id: storeid });
-        // console.log(" store", store);
+        // //console.log(" store", store);
 
         const time = await TimeSlot.find({ serviceid: serviceid, start: start });
 
-        // console.log("d", time.length);
+        // //console.log("d", time.length);
         var err;
-        // console.log("emp", store[0].employees);
+        // //console.log("emp", store[0].employees);
         let employeecount = parseInt(store[0].employees);
-        // console.log("fgd", employeecount);
+        // //console.log("fgd", employeecount);
 
 
         timeslots.forEach(element => {
@@ -320,7 +320,7 @@ export const bookingdemo = async (req, res) => {
             res.status(500).json({ "success": false });
 
         } else {
-            // console.log(" hell ");
+            // //console.log(" hell ");
 
             const newBooking = new Booking({
                 start,
@@ -355,7 +355,7 @@ export const bookingdemo = async (req, res) => {
 
 
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(201).json({ "success": false });
 
     }
@@ -364,62 +364,62 @@ export const bookingdemo = async (req, res) => {
 /* View User Booking */
 
 export const viewall = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const { userid } = req.params;
         const bookings = await Booking.find({ "userid": userid }).select('-createdAt').select('-__v').select('-updatedAt');
         bookings.forEach(element => {
-            // // console.log(element);
+            // // //console.log(element);
             element.bookingid = element._id;
             // element.username = element._id;
         });
-        // console.log(" nbooking ");
-        // console.log(bookings);
+        // //console.log(" nbooking ");
+        // //console.log(bookings);
         res.status(201).json(bookings);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const storebooking = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const { storeid } = req.params;
         const bookings = await Booking.find({ "storeid": storeid }).select('-createdAt').select('-__v').select('-updatedAt');
         bookings.forEach(element => {
-            // // console.log(element);
+            // // //console.log(element);
             element.bookingid = element._id;
         });
-        // console.log(bookings);
+        // //console.log(bookings);
         res.status(201).json(bookings);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const viewsingle = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         const { id } = req.params;
         const booking = await Booking.find({ id }).select('-createdAt').select('-__v').select('-updatedAt');
         res.status(201).json(booking);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const cancelbooking = async (req, res) => {
-    console.log('called');
+    //console.log('called');
     try {
         const { id } = req.params;
 
         let obj = await Booking.findOne({ _id: id });
         let store = await Store.findOne({ _id: obj.storeid });
-        console.log(obj);
-        console.log(store);
+        //console.log(obj);
+        //console.log(store);
         const newOrder = new Order({
             start: obj.start,
             end: obj.end,
@@ -443,8 +443,8 @@ export const cancelbooking = async (req, res) => {
         let employeecount = parseInt(store.employees);
         let timeslots1 = await TimeSlot.find({ storeid: obj.storeid, date: obj.date }).select('times').select('date');
         let timeslots = timeslots1[0].times;
-        console.log("firstdate", timeslots1);
-        console.log("firstdateid", timeslots1[0]._id);
+        //console.log("firstdate", timeslots1);
+        //console.log("firstdateid", timeslots1[0]._id);
 
         let pass = true;
         let array = [];
@@ -458,8 +458,8 @@ export const cancelbooking = async (req, res) => {
                 array.push(start);
             }
 
-            console.log(array);
-            console.log('nots cal');
+            //console.log(array);
+            //console.log('nots cal');
             array.forEach(ele => {
                 timeslots.forEach(e => {
                     if (e.time == ele) {
@@ -484,81 +484,81 @@ export const cancelbooking = async (req, res) => {
             }
         ).then(async (data, err) => {
             if (err) {
-                console.log(err);
+                //console.log(err);
             } else {
-                console.log(data);
+                //console.log(data);
             }
         })
 
 
     } catch (err) {
-        console.log("err", err);
+        //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 
 export const getTimeSlots1 = async (req, res) => {
-    // console.log('called');
+    // //console.log('called');
     try {
         // find time slots based on store id not on service id
 
         const { storeid, date } = req.params;
-        // console.log(storeid, date);
+        // //console.log(storeid, date);
         const timeslots = await TimeSlot.find({ storeid: storeid, date: date }).select('start').select('end').select('date');
-        // console.log(timeslots);
+        // //console.log(timeslots);
         let times = [];
         timeslots.forEach(element => {
             times.push({ start: element.start, end: element.end, date: element.date })
         });
-        // console.log(times);
+        // //console.log(times);
         res.status(201).json(times);
     } catch (err) {
-        // console.log("err", err);
+        // //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 export const getTimeSlots = async (req, res) => {
-    console.log('called');
+    //console.log('called');
     try {
         const { storeid, date } = req.params;
         // find time slots 
         const timeslots = await TimeSlot.find({ storeid: storeid, date: date }).select('times').select('date');
-        // console.log(" before",timeslots);
+        // //console.log(" before",timeslots);
 
         if (timeslots.length == 0) {
-            console.log("if");
+            //console.log("if");
             let times = await firstbooking(storeid, date);
-            // console.log('timeslots',times.times);
+            // //console.log('timeslots',times.times);
             res.status(201).json(times.times);
         } else {
-            console.log("else");
-            // console.log(timeslots[0].times);
+            //console.log("else");
+            // //console.log(timeslots[0].times);
             res.status(201).json(timeslots[0].times);
         }
     } catch (err) {
-        console.log("err", err);
+        //console.log("err", err);
         res.status(500).json({ error: err.message });
     }
 };
 
 async function firstbooking(storeid, date) {
-    console.log(' storeid ', storeid);
+    //console.log(' storeid ', storeid);
     let store = await Store.findOne({ _id: storeid }).select('-createdAt').select('-__v').select('-updatedAt');
-    console.log(' store ', store);
+    //console.log(' store ', store);
 
     let time = convertToTime(store.start);
-    console.log("time old", time);
-    // console.log("time1",time1);
+    //console.log("time old", time);
+    // //console.log("time1",time1);
 
     const startTime = new Date(`2023-02-25T${convertToTime(store.start)}`);
     const endTime = new Date(`2023-02-25T${convertToTime(store.end)}`);
     const diffHours = Math.floor((endTime.getTime() - startTime.getTime()) / 3600000);
 
-    // console.log("start", startTime);
-    // console.log("end", endTime);
-    console.log("diff", diffHours);
+    // //console.log("start", startTime);
+    // //console.log("end", endTime);
+    //console.log("diff", diffHours);
     let times = [];
 
     for (let hour = 0; hour < 12 * diffHours; hour = hour + 1) {
@@ -569,25 +569,25 @@ async function firstbooking(storeid, date) {
             status: "n"
         }
         time = addMinutesToTimeString(time, 5)
-        console.log(" time new", time);
+        //console.log(" time new", time);
         times.push(obj);
-        console.log(" obj", obj);
+        //console.log(" obj", obj);
     }
-    console.log("times", times);
+    //console.log("times", times);
     const newTimeSlot = new TimeSlot({
         date,
         storeid,
         times
     });
     const savedTimeSlot = await newTimeSlot.save();
-    console.log("savedtimes", savedTimeSlot);
+    //console.log("savedtimes", savedTimeSlot);
     return savedTimeSlot;
 }
 
 function convertToTime(timeString) {
 
     const convertTime12to24 = (time12h) => {
-        console.log('time12h', time12h);
+        //console.log('time12h', time12h);
         const [time, modifier] = time12h.split(' ');
 
         let [hours, minutes] = time.split(':');
@@ -603,7 +603,7 @@ function convertToTime(timeString) {
         return `${hours}:${minutes}`;
     }
 
-    // console.log(convertTime12to24(timeString));
+    // //console.log(convertTime12to24(timeString));
     let time = convertTime12to24(timeString);
 
     return time;
@@ -633,19 +633,19 @@ function addMinutesToTimeString(timeString, minutesToAdd) {
  // timeslots.forEach(e => {
     //     if (e.time == start) {
     //         if (e.status == "b") {
-    //             console.log('prevention');
+    //             //console.log('prevention');
     //             res.status(201).json({ "success": false });
     //         } else if (employeecount < e.count + 1) {
-    //             console.log('booking prebvention');
+    //             //console.log('booking prebvention');
     //             e.status = "b";
-    //             console.log(e.status);
+    //             //console.log(e.status);
     //             e.count = e.count + 1;
-    //             console.log(e);
+    //             //console.log(e);
     //         } else {
-    //             console.log('booked');
-    //             console.log(e);
+    //             //console.log('booked');
+    //             //console.log(e);
     //             e.count = e.count + 1;
-    //             console.log(e);
+    //             //console.log(e);
     //         }
     //     }
     // });

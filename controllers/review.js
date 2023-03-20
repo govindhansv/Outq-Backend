@@ -17,7 +17,7 @@ export const getStoreReviews = async (req, res) => {
         rate = rate * 2;
         rate = Math.round(rate);
         rate = rate / 2;
-        console.log(rate);
+        //console.log(rate);
         
         let length = count.length;
         const id = req.params.storeid;
@@ -33,7 +33,7 @@ export const getStoreReviews = async (req, res) => {
         console.log("l",length);
         console.log("r",rate);
         console.log(' gftdqqqqqqqq');
-        console.log(req.params.storeid);
+        //console.log(req.params.storeid);
 
         // Store.updateOne(
         //     { _id: req.params.storeid },
@@ -46,17 +46,17 @@ export const getStoreReviews = async (req, res) => {
         //     }
         // ).then(async (data, err) => {
         //     if (err) {
-        //         console.log(err);
+        //         //console.log(err);
         //     } else {
-        //         console.log(data);
+        //         //console.log(data);
         //     }
         // })
 
         Review.find({"storeid": req.params.storeid})
             .then(reviews => {
-                // console.log(" reviews \n", reviews);
+                // //console.log(" reviews \n", reviews);
                 reviews.reverse();
-                console.log(reviews);
+                //console.log(reviews);
                 res.json(reviews);
             })
             .catch(err => {
@@ -64,7 +64,7 @@ export const getStoreReviews = async (req, res) => {
             });
         
     } catch (err) {
-        console.log("err",err);
+        //console.log("err",err);
         res.status(404).json({ message: err.message });
     }
 }
@@ -89,7 +89,7 @@ export const getSingleReview = async (req, res) => {
 export const postReview = async (req, res) => {
     try {
 
-        console.log(req.body);
+        //console.log(req.body);
         let user = await User.findById(req.body.userid);
 
         const review = new Review({
@@ -102,11 +102,11 @@ export const postReview = async (req, res) => {
 
 
         const savedReview = await review.save();
-        console.log(savedReview);
+        //console.log(savedReview);
         res.status(201).json({ status: true, review: savedReview });
 
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         res.status(404).json({ message: err.message });
     }
 }
