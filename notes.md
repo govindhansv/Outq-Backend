@@ -55,4 +55,21 @@ http://localhost:3001/store/register
   "location":"California"
 }
 
-http://localhost:3001/store/ownerid
+http://localhost:3001/store/owneri
+
+{
+   "name":"yest",
+            "location":"gf",
+            "id":"gf",
+            "description":"dfgfrg",
+            "type":"gf",
+            "img":"g",
+            "start":"9:30",
+            "end":"8:30",
+            "employees":3,
+            "longitude":"hghg",
+            "latitude":"g",
+            "pincode":"45",
+            "gender":"hg",
+            "working":"ty"
+}

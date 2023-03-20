@@ -1,5 +1,7 @@
 import Store from "../models/Store.js";
 import Service from "../models/Service.js";
+import Review from "../models/Review.js";
+import mongoose from "mongoose";
 
 // STORE CRUD
 /* REGISTER STORE */
@@ -42,7 +44,9 @@ export const register = async (req, res) => {
             latitude,
             pincode,
             gender,
-            working
+            working,
+            reviews:"5",
+            reviewcount:1,
             // ownerf:owner.firstName,
             // ownerl:owner.lastName,
         });
@@ -50,6 +54,16 @@ export const register = async (req, res) => {
         // const stores = await Store.find({ownerId:ownerId});
         console.log("store",store);
         // res.status(201).json({ store:store, stores:stores });
+        const review = new Review({
+            _id: new mongoose.Types.ObjectId(),
+            rating: 5,
+            comment: "",
+            storeid: store._id,
+            user: {name:"manu"},
+        });
+
+        const savedReview = await review.save();
+        console.log(savedReview);
         res.status(201).json({ success: true, store: store });
     } catch (err) {
         res.status(409).json({ error: err.message });
@@ -118,7 +132,7 @@ export const getStore = async (req, res) => {
                 console.log(data);
             }
         })
-
+        console.log(store);
         res.status(201).json(store);
     } catch (err) {
         // // console.log(err);
