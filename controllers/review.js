@@ -21,18 +21,18 @@ export const getStoreReviews = async (req, res) => {
         
         let length = count.length;
         const id = req.params.storeid;
-        console.log(' gftd');
-        console.log("lb",length);
-        console.log("rb",rate);
+        // console.log(' gftd');
+        // console.log("lb",length);
+        // console.log("rb",rate);
         if (length ==NaN) {
             length = 0;
         }
         if (rate ==NaN) {
             rate = 0;
         }
-        console.log("l",length);
-        console.log("r",rate);
-        console.log(' gftdqqqqqqqq');
+        // console.log("l",length);
+        // console.log("r",rate);
+        // console.log(' gftdqqqqqqqq');
         //console.log(req.params.storeid);
 
         // Store.updateOne(

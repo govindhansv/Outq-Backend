@@ -131,7 +131,7 @@ export const update = async (req, res) => {
       });
     // res.status(201).json([{ "id": userid }]);
   } catch (err) {
-    // //console.log(err);
+    // console.log(err);
     res.status(500).json({ error: true });
   }
 };
