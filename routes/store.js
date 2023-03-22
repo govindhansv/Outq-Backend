@@ -4,7 +4,7 @@ import { register,getOwnerStores,delStore,getStore,updateStore,getAllStore,oldge
 const router = express.Router();
 
 router.post("/register", register);
-router.get("/store/get/user/", oldgetAllStore);
+router.get("/store/get", oldgetAllStore);
 router.get("/store/get/user/:userid", getAllStore);
 router.get("/store/get/:storeId", getStore);
 router.get('/store/del/:id',delStore);
