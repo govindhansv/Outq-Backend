@@ -121,6 +121,33 @@ export const getAllStore = async (req, res) => {
     }
 };
 
+// READ ALL STORE
+export const oldgetAllStore = async (req, res) => {
+    try {
+        let stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
+        // // // //console.log(stores);;
+        // stores.reverse();
+        // // //console.log(stores);
+        // let user = await User.findOne({ _id: req.params.userid });
+        // console.log(user);
+
+        // let stores = await getNearbyShops(9.1605347, 76.7151942, 100000000);
+        // let stores = await getNearbyShops(user.latitude, user.longitude, 100000000);
+        stores.forEach(element => {
+            // // // //console.log(element);
+            element.type = element._id;
+        });
+
+        console.log("result ");
+        console.log(stores);
+        
+        res.status(201).json(stores);
+    } catch (err) {
+        console.log(err);
+        res.status(404).json({ message: err.message });
+    }
+};
+
 // READ A SINGLE STORE
 export const getStore = async (req, res) => {
     try {
@@ -213,6 +240,76 @@ export const searchStore = async (req, res) => {
 //   QUERY STORE
 
 export const queryStore = async (req, res) => {
+    //console.log('called');
+    try {
+        const { query } = req.params;
+
+        let arr = [];
+        let services = [];
+        if (query == 'Men') {
+
+            Store.find({ gender: { $in: ["Men", "Unisex"] } })
+                .sort({ name: 'asc' })
+                .exec(async (err, objects) => {
+                    if (err) {
+                        return res.status(500).send(err);
+                    } else {
+                        let a = [];
+
+                        objects.forEach(element => {
+                            // // // //console.log(element);
+                            element.type = element._id;
+                            a.push(element._id);
+                        });
+
+                        arr = arr.concat(a);
+                        for (let i = 0; i < arr.length; i++) {
+                            let service = await Service.find({ "storeid": arr[i] });
+                            if (service) {
+                                services = services.concat(service);
+                            }
+                        }
+                       
+                        res.status(201).json(services);
+                    }
+                });
+
+        } else {
+
+            Store.find({ gender: { $in: ["Women", "Unisex"] } })
+                .sort({ name: 'asc' })
+                .exec(async (err, objects) => {
+                    if (err) {
+                        return res.status(500).send(err);
+                    } else {
+                        let a = [];
+
+                        objects.forEach(element => {
+                            // // // //console.log(element);
+                            element.type = element._id;
+                            a.push(element._id);
+                        });
+                        
+                        arr = arr.concat(a);
+                        for (let i = 0; i < a.length; i++) {
+                            let service = await Service.find({ "storeid": a[i] });
+                            if (service) {
+                                services = services.concat(service);
+                            }
+                        }
+                        res.status(201).json(services);
+                    }
+                });
+        }
+
+
+    } catch (err) {
+        //console.log(err);
+        res.status(501).json({ message: "ERR ", ERR: err });
+    }
+};
+
+export const oldqueryStore = async (req, res) => {
     //console.log('called');
     try {
         const { query } = req.params;

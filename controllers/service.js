@@ -106,6 +106,56 @@ export const getStoreServices = async (req, res) => {
 
 /* READ Service Data*/
 
+export const oldgetAllService = async (req, res) => {
+    try {
+        // let user = await User.findOne({ _id: req.params.userid });
+        // console.log(user);
+        // const services = await Service.find({}).sort({ time: 1 });
+
+        // let services = await Service.find({}).sort({ storename: 'asc' }).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');
+        let services = await Service.aggregate([
+            {
+                $addFields: {
+                    offer_percentage: {
+                        $multiply: [
+                            { $divide: [{ $subtract: [{ $toDouble: { $replaceOne: { input: "$ogprice", find: ",", replacement: "" } } }, { $toDouble: { $replaceOne: { input: "$price", find: ",", replacement: "" } } }] }, { $toDouble: { $replaceOne: { input: "$ogprice", find: ",", replacement: "" } } }] },
+                            100
+                        ]
+                    }
+                }
+            },
+            { $sort: { offer_percentage: -1 } },
+            {
+                $project: {
+                    _id: 0,
+                    name: 1,
+                    price: 1,
+                    description: 1,
+                    ogprice: 1,
+                    img:1,
+                    storeid:1,
+                    ownerid:1,
+                    duration:1,
+                    start:1,
+                    end:1,
+                    storename:1
+                }
+            }
+         
+        ])
+        // //console.log(services);
+        // services.reverse();
+        // const stores = await Store.find({}).select('-__v').select('-updatedAt');
+        services.forEach(element => {
+            // // // //console.log(element);
+            element.ownerid = element._id;
+        });
+        res.status(201).json(services);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
 export const getAllService = async (req, res) => {
     try {
         let user = await User.findOne({ _id: req.params.userid });
