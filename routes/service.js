@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 router.post("/create", addService);
-router.get("/getall/", getAllService);
+router.get("/getall/:userid", getAllService);
 router.get("/get/:storeid", getStoreServices);
 router.get("/getservice/:serviceId", getService);
 router.get('/del/:id',delService);

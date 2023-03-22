@@ -2,6 +2,7 @@ import express from "express";
 import Store from "../models/Store.js";
 import Service from "../models/Service.js";
 import geolib from 'geolib';
+import Error from "../models/Err.js";
 
 // import { initializeApp, credential as _credential } from "firebase-admin";
 // import serviceAccount from "./outq-2b5af-firebase-adminsdk-xgart-9ae70eeb27.json?type=json";
@@ -46,31 +47,31 @@ router.get("/", (req, res) => {
     // // //console.log('called');
     Service.find().populate('storeid').exec((err, services) => {
         if (err) {
-          console.error(err);
-          return;
+            console.error(err);
+            return;
         }
-      
+
         // Loop through the services and add the latitude and longitude fields
         services.forEach(service => {
             //console.log(service);
-          service.latitude = service.storeid.latitude;
-          service.longitude = service.storeid.longitude;
+            service.latitude = service.storeid.latitude;
+            service.longitude = service.storeid.longitude;
         });
 
         Service.bulkWrite(services.map(service => ({
             updateOne: {
-              filter: { _id: service._id },
-              update: { $set: { latitude: service.latitude, longitude: service.longitude } }
+                filter: { _id: service._id },
+                update: { $set: { latitude: service.latitude, longitude: service.longitude } }
             }
-          })), (err, result) => {
+        })), (err, result) => {
             if (err) {
-              console.error(err);
-              return;
+                console.error(err);
+                return;
             }
-        
+
             //console.log(result);
         });
-        
+
         // //console.log(services);
     });
 
@@ -111,15 +112,20 @@ router.get("/testing", async (req, res) => {
             return nearbyShops;
         });
     }
-        //console.log("result ");
-        //console.log(await getNearbyShops(9.1597267,76.7176525,100000000));
-    
+    //console.log("result ");
+    //console.log(await getNearbyShops(9.1597267,76.7176525,100000000));
+
 });
 
 router.get("/db", async (req, res) => {
-    let allservices = await Service.find({})
-
-    res.status(201).json(allservices);
+    try {
+        let allservices = await Service.find({ id })
+        res.status(201).json(allservices);
+    } catch (err) {
+        const newErr = new Error({ any: err });
+        const error = await newErr.save();
+        res.status(409).json({ error: err.message,err:error });
+    }
 });
 
 

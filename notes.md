@@ -73,3 +73,11 @@ http://localhost:3001/store/owneri
             "gender":"hg",
             "working":"ty"
 }
+
+//gendfer 
+//type
+//syore --
+//service
+//combo
+// store --
+<!-- //follower -->

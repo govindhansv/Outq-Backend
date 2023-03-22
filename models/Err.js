@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const ErrorSchema = new mongoose.Schema(
   {
-   any: Schema.Types.Mixed
-  },
+   any: Object
+  },{ strict: false }
 );
 
 const Error = mongoose.model("Error", ErrorSchema);

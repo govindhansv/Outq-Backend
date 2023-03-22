@@ -1,7 +1,10 @@
 import Store from "../models/Store.js";
 import Service from "../models/Service.js";
 import Review from "../models/Review.js";
+import User from "../models/User.js";
 import mongoose from "mongoose";
+import geolib from "geolib";
+import { getNearbyShops } from "../functions.js";
 
 // STORE CRUD
 /* REGISTER STORE */
@@ -94,54 +97,26 @@ export const getOwnerStores = async (req, res) => {
 // READ ALL STORE
 export const getAllStore = async (req, res) => {
     try {
-        let stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
+        // let stores = await Store.find({}).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
         // // // //console.log(stores);;
-        stores.reverse();
-      
+        // stores.reverse();
         // // //console.log(stores);
-        // function calculateDistance(lat1, lon1, lat2, lon2) {
-        //     const distance = geolib.getDistance(
-        //         { latitude: lat1, longitude: lon1 },
-        //         { latitude: lat2, longitude: lon2 }
-        //     );
-        //     return distance;
-        // }
-    
-        // function getNearbyShops(userLat, userLon, maxDistance) {
-        //     return Store.find({}).lean().exec().then((shops) => {
-        //         // Calculate the distance between each shop and the user's location
-        //         // //console.log(shops);
-        //         shops.forEach((shop) => {
-        //             shop.distance = calculateDistance(
-        //                 userLat,
-        //                 userLon,
-        //                 shop.latitude,
-        //                 shop.longitude,
-        //             );
-        //             //console.log(shop.distance);
-        //         });
-    
-        //         // Sort the shops based on their distance
-        //         shops.sort((a, b) => a.distance - b.distance);
-    
-        //         // Filter the shops based on the maximum distance
-        //         const nearbyShops = shops.filter((shop) => shop.distance <= maxDistance);
-    
-        //         return nearbyShops;
-        //     });
-        // }
+        let user = await User.findOne({ _id: req.params.userid });
+        console.log(user);
 
+        // let stores = await getNearbyShops(9.1605347, 76.7151942, 100000000);
+        let stores = await getNearbyShops(user.latitude, user.longitude, 100000000);
         stores.forEach(element => {
             // // // //console.log(element);
             element.type = element._id;
         });
 
-        // let stores = await getNearbyShops(9.1597267, 76.7176525, 100000000);
-        // //console.log("result ");
-        // //console.log(await getNearbyShops(9.1597267, 76.7176525, 100000000));
+        console.log("result ");
+        console.log(stores);
         
         res.status(201).json(stores);
     } catch (err) {
+        console.log(err);
         res.status(404).json({ message: err.message });
     }
 };
@@ -336,11 +311,11 @@ export const working = async (req, res) => {
     // // //console.log('called');
     try {
         
-        //console.log(req.params);
+        console.log(req.params);
         let store = await Store.findById(req.params.storeid);
         let status;
         if (store.working =='on') {
-            status = 'off';
+            status = 'on';
         } else {
             status = 'on';
         }
@@ -358,6 +333,7 @@ export const working = async (req, res) => {
                 }
             });
         
+                    res.status(201).json({ status: true, data: data });
     } catch (err) {
         res.status(404).json({ message: err.message });
     }

@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Store from "../models/Store.js";
 
@@ -19,7 +18,7 @@ export const register = async (req, res) => {
       location,
       pincode,
       deviceid,
-      
+
     } = req.body;
 
     // //console.log(req.body);
@@ -146,10 +145,35 @@ export const getUserSavedStores = async (req, res) => {
     for (let i = 0; i < userstores.length; i++) {
       let store = await Store.findOne({ _id: userstores[i] });
 
-        store.type = store._id;
-    
+      store.type = store._id;
+
       svdstores.push(store);
-    }    
+    }
+
+
+    svdstores.forEach((shop) => {
+      shop.distance = calculateDistance(
+        userLat,
+        userLon,
+        shop.latitude,
+        shop.longitude,
+      );
+      //console.log(shop.distance);
+    });
+
+    // Sort the shops based on their distance
+    svdstores.sort((a, b) => a.distance - b.distance);
+
+    // Filter the shops based on the maximum distance
+    svdstores = svdstores.filter((shop) => shop.distance <= 1000000000);
+
+
+    // let stores = await getSavedShops(user.latitude, user.longitude, 100000000);
+    svdstores.forEach(element => {
+      // // // //console.log(element);
+      element.type = element._id;
+    });
+
     res.status(201).json(svdstores);
 
   } catch (err) {

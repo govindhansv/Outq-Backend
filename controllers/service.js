@@ -108,6 +108,8 @@ export const getStoreServices = async (req, res) => {
 
 export const getAllService = async (req, res) => {
     try {
+        let user = await User.findOne({ _id: req.params.userid });
+        console.log(user);
         // const services = await Service.find({}).sort({ time: 1 });
 
         // let services = await Service.find({}).sort({ storename: 'asc' }).select('-createdAt').select('-__v').select('-updatedAt').select('-pincode').select('-longitude').select('-latitude').select('-distance');

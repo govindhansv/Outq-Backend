@@ -18,6 +18,7 @@ import orderRoutes from "./routes/order.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import notificationRoutes from "./routes/notification.js";
 import reviewRoutes from "./routes/review.js";
+import busRoutes from "./routes/bus.js";
 // import paymentRoutes from "./routes/payment.js";
 // import historyRoutes from "./routes/history.js";
 import testRoutes from "./routes/test.js";
@@ -76,6 +77,7 @@ const upload = multer({ storage });
 /* ROUTES */
 app.use("/auth/user", authRoutes);
 app.use("/auth/owner", ownerRoutes);
+app.use("/auth/bus", busRoutes);
 app.use("/store", storeRoutes);
 app.use("/service", serviceRoutes);
 app.use("/booking", bookingRoutes);
