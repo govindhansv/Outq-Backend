@@ -144,12 +144,9 @@ export const getUserSavedStores = async (req, res) => {
     let userstores = user[0].savedstores;
     for (let i = 0; i < userstores.length; i++) {
       let store = await Store.findOne({ _id: userstores[i] });
-
       store.type = store._id;
-
       svdstores.push(store);
     }
-
 
     svdstores.forEach((shop) => {
       shop.distance = calculateDistance(
