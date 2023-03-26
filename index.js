@@ -23,18 +23,73 @@ import busRoutes from "./routes/bus.js";
 // import historyRoutes from "./routes/history.js";
 import testRoutes from "./routes/test.js";
 import csmamoc from "./routes/csmamoc.js";
+import doctor from "./mainroutes/doctor.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 // import User from "./models/User.js";
 // import Post from "./models/Post.js";
 // import { users, posts } from "./data/index.js";
+import { Server } from "socket.io";
+import { createServer } from "http";
+// ERROR MANAGEMENT
+import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
+
+Sentry.init({
+  dsn: "https://5e2497b7fc5b4156a4acb09f4e44ff5c@o4504893974642688.ingest.sentry.io/4504893996007424",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+const transaction = Sentry.startTransaction({
+  op: "test",
+  name: "My First Test Transaction",
+});
+
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
+
 const app = express();
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+  }
+});
+
+io.on("connection", (socket) => {
+
+  console.log(" a user connected",socket.id);
+  // console.log(socket);
+
+  socket.on("message", (data) => {
+    console.log(data);
+    socket.broadcast.emit('message',data)
+    // io.emit("location", data);
+  });
+
+  socket.on("bus-location", (data) => {
+    io.emit(data.busid, data);
+    console.log(data);
+  });
+
+  socket.on("disconnect", () => {
+
+  });
+});
+
+// httpServer.listen(3000);
+// io.listen(3000);
+
+try {
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -77,7 +132,7 @@ const upload = multer({ storage });
 /* ROUTES */
 app.use("/auth/user", authRoutes);
 app.use("/auth/owner", ownerRoutes);
-app.use("/auth/bus", busRoutes);
+app.use("/bus", busRoutes);
 app.use("/store", storeRoutes);
 app.use("/service", serviceRoutes);
 app.use("/booking", bookingRoutes);
@@ -87,13 +142,22 @@ app.use("/dashboard", dashboardRoutes);
 app.use("/notification", notificationRoutes);
 app.use("/review", reviewRoutes);
 app.use("/csmamoc", csmamoc);
+  
+// DOCTOR API
+app.use("/doctor", doctor);
 // app.use("/payment", paymentRoutes);
 // app.use("/history", testRoutes);
-
 app.use("/test/api", testRoutes);
+
+} catch (e) {
+  Sentry.captureException(e);
+} finally {
+  transaction.finish();
+}
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
+
 mongoose.set('strictQuery', true)
 mongoose
   .connect(process.env.MONGO_URL, {
@@ -101,7 +165,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () =>  console.log(`Server Running on Port: ${PORT}`));
+    httpServer.listen(PORT, () =>  console.log(`Server Running on Port: ${PORT}`));
     
        /* ADD DATA ONE TIME */
     // User.insertMany(users);

@@ -12,7 +12,7 @@ const BusOwnerSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
-    password: {
+    pswd: {
       type: String,
       min: 5,
     },

@@ -4,6 +4,41 @@ import Service from "../models/Service.js";
 import geolib from 'geolib';
 import Error from "../models/Err.js";
 
+
+// ERROR MANAGEMENT
+import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
+
+const router = express.Router();
+
+Sentry.init({
+  dsn: "https://5e2497b7fc5b4156a4acb09f4e44ff5c@o4504893974642688.ingest.sentry.io/4504893996007424",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+const transaction = Sentry.startTransaction({
+  op: "test",
+  name: "My First Test Transaction",
+});
+
+router.get("/err", async (req, res) => {
+
+    // setTimeout(() => {
+        // try {
+            console.log('no err');
+            // console.log(id);
+        // } catch (e) {
+        //     Sentry.captureException(e);
+        // } finally {
+        //     transaction.finish();
+        // }
+    // }, 99);
+});
+
 // import { initializeApp, credential as _credential } from "firebase-admin";
 // import serviceAccount from "./outq-2b5af-firebase-adminsdk-xgart-9ae70eeb27.json?type=json";
 
@@ -40,7 +75,6 @@ import Error from "../models/Err.js";
 
 
 
-const router = express.Router();
 
 
 router.get("/", (req, res) => {
@@ -124,9 +158,10 @@ router.get("/db", async (req, res) => {
     } catch (err) {
         const newErr = new Error({ any: err });
         const error = await newErr.save();
-        res.status(409).json({ error: err.message,err:error });
+        res.status(409).json({ error: err.message, err: error });
     }
 });
+
 
 
 router.get("/reg", async (req, res) => {

@@ -17,11 +17,18 @@ const BusSchema = new mongoose.Schema(
       type: String,
     },
     startplace: {
-      type: String,
+      type: Object,
     },
     endplace: {
+        type: Object,
+    },
+    ownerid: {
+        type: String,
+    },
+    busid: {
         type: String,
     }
+
   },
   { timestamps: true }
 );

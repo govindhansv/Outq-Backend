@@ -1,10 +1,12 @@
 import bcrypt from "bcrypt";
-import User from "../models/User.js";
-import Store from "../models/Store.js";
+import Bus from "../models/Bus.js";
+import BusOwner from "../models/BusOwner.js";
+import Collection from "../models/Collection.js";
+
 
 /* REGISTER USER */
 export const register = async (req, res) => {
-  // //console.log('called');
+  console.log('called');
   try {
     const {
       // firstName,
@@ -14,10 +16,8 @@ export const register = async (req, res) => {
       pswd,
       // picturePath,
       // friends,
-      phone,
-      location,
-      pincode,
       deviceid,
+      phone,
 
     } = req.body;
 
@@ -26,7 +26,7 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(pswd, salt);
 
-    const newUser = new User({
+    const newBusOwner = new BusOwner({
       // firstName,
       // lastName,
       name,
@@ -34,23 +34,21 @@ export const register = async (req, res) => {
       pswd: passwordHash,
       // picturePath,
       // friends,
-      phone,
-      location,
-      pincode,
       deviceid,
+      phone,
       cpswd: pswd
       // viewedProfile: Math.floor(Math.random() * 10000),
       // impressions: Math.floor(Math.random() * 10000),
     });
-    const savedUser = await newUser.save();
+    const savedBusOwner = await newBusOwner.save();
+    console.log(savedBusOwner);
 
-    let userid = savedUser._id.toString();
+    let userid = savedBusOwner._id.toString();
     // //console.log(userid);
     res.status(201).json([{ "id": userid }]);
-
     // res.status(201).json(savedUser);
   } catch (err) {
-    // //console.log("err",err);
+    console.log("err", err);
     res.status(500).json({ error: true });
   }
 };
@@ -60,31 +58,35 @@ export const login = async (req, res) => {
   //console.log('called');
   try {
     const { email, pswd } = req.body;
-    //console.log(email, pswd);
-    const user = await User.findOne({ email: email });
-    //console.log(user);
+    console.log(email, pswd);
+    const user = await BusOwner.findOne({ email: email });
+    console.log(user);
     if (!user) {
       return res.status(400).json({ msg: "User does not exist. " });
-      //console.log(' uaser not found');
+      console.log(' uaser not found');
     }
 
     const isMatch = await bcrypt.compare(pswd, user.pswd);
-    //console.log(isMatch);
+    console.log(isMatch);
     if (!isMatch) {
+      console.log(' invalid');
       return res.status(400).json({ msg: "Invalid credentials. " });
-      //console.log(' invalid');
+    } else {
+      console.log(' valid');
+      let userid = user._id.toString();
+    // let userlocation = user._id;
+    console.log(userid);
+    res.status(201).json([{ "id": userid }]);
+      
     }
 
     // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     // delete user.password;
     // res.status(201).json({ token, user });
 
-    let userid = user._id.toString();
-    let userlocation = user._id;
-    // //console.log(userid);
-    res.status(201).json([{ "id": userid }]);
+
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     res.status(500).json({ error: true });
   }
 };
@@ -93,182 +95,169 @@ export const login = async (req, res) => {
 export const driverlogin = async (req, res) => {
   //console.log('called');
   try {
-    const { email, pswd } = req.body;
+    const { id, pswd } = req.body;
     //console.log(email, pswd);
-    const user = await User.findOne({ email: email });
-    //console.log(user);
+    const user = await Bus.findOne({ "id": id });
+    console.log(user);
     if (!user) {
-      return res.status(400).json({ msg: "User does not exist. " });
-      //console.log(' uaser not found');
+      console.log(' uaser not found');
+      return res.status(400).json({ msg: "Bus does not exist. " });
     }
 
-    const isMatch = await bcrypt.compare(pswd, user.pswd);
+    // const isMatch = await bcrypt.compare(pswd, user.pswd);
     //console.log(isMatch);
-    if (!isMatch) {
+    if (pswd != user.pswd) {
       return res.status(400).json({ msg: "Invalid credentials. " });
       //console.log(' invalid');
-    }
+    } else {
+      let userid = user._id.toString();
 
+      res.status(201).json([{ "id": id }]);
+    }
     // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     // delete user.password;
     // res.status(201).json({ token, user });
 
-    let userid = user._id.toString();
-    let userlocation = user._id;
+    // let userlocation = user._id;
     // //console.log(userid);
-    res.status(201).json([{ "id": userid }]);
   } catch (err) {
-    //console.log(err);
+    console.log(err);
     res.status(500).json({ error: true });
   }
 };
 
-
-
 export const createbus = async (req, res) => {
-    try {
-        console.log(req.body);
-        let {
-            name,
-            number,
-            id,
-            pswd,
-            start,
-            end,
-        } = req.body;
+  try {
+    console.log(req.body);
+    let {
+      name,
+      number,
+      id,
+      pswd,
+      startplace,
+      endplace,
+      ownerid
+    } = req.body;
 
-        // const owner = await Owner.findById(ownerId);
-        // const owner = await Owner.findOne({ firstName: ownerId });.
+    const start = JSON.parse(startplace);
+    const end = JSON.parse(endplace);
+    const owner = await BusOwner.findById(ownerid);
 
-        const newStore = new Store({
-            name,
-            number,
-            id,
-            pswd,
-            startplace,
-            endplace,
-        });
-        const store = await newStore.save();
-        // const stores = await Store.find({ownerId:ownerId});
-        //console.log("store",store);
-        // res.status(201).json({ store:store, stores:stores });
-        const review = new Review({
-            _id: new mongoose.Types.ObjectId(),
-            rating: 5,
-            comment: "",
-            storeid: store._id,
-            user: {name:"manu"},
-        });
+    const newBus = new Bus({
+      name,
+      number,
+      id,
+      pswd,
+      startplace:start,
+      endplace:end,
+      ownerid: owner._id,
+      busid: ""
+    });
 
-        const savedReview = await review.save();
-        console.log(savedReview);
-        res.status(201).json({ success: true, store: store });
-    } catch (err) {
-        console.log(err);
-        res.status(409).json({ error: err.message });
-    }
+    const savedBus = await newBus.save();
+    // const stores = await Store.find({ownerId:ownerId});
+    console.log("store", savedBus);
+    // res.status(201).json({ store:store, stores:stores });
+    res.status(201).json({ success: true, bus: savedBus });
+  } catch (err) {
+    console.log(err);
+    res.status(409).json({ error: err.message });
+  }
 };
 
 export const createcollection = async (req, res) => {
-    try {
-        // // // //console.log(req.body);
-        let {
-            name,
-            location,
-            id,
-            description,
-            type,
-            img,
-            start,
-            end,
-            employees,
-            longitude,
-            latitude,
-            pincode,
-            gender,
-            working
-        } = req.body;
-        if (img == "") {
-            img = "https://www.shutterstock.com/image-photo/female-hairdresser-standing-making-hairstyle-260nw-391326496.jpg"
-        }
-        // const owner = await Owner.findById(ownerId);
-        // const owner = await Owner.findOne({ firstName: ownerId });
-        const newStore = new Store({
-            name,
-            location,
-            id,
-            description,
-            type,
-            img,
-            start,
-            end,
-            employees,
-            longitude,
-            latitude,
-            pincode,
-            gender,
-            working,
-            reviews:"5",
-            reviewcount:1,
-            // ownerf:owner.firstName,
-            // ownerl:owner.lastName,
-        });
-        const store = await newStore.save();
-        // const stores = await Store.find({ownerId:ownerId});
-        //console.log("store",store);
-        // res.status(201).json({ store:store, stores:stores });
-        const review = new Review({
-            _id: new mongoose.Types.ObjectId(),
-            rating: 5,
-            comment: "",
-            storeid: store._id,
-            user: {name:"manu"},
-        });
+  console.log(' called ');
+  try {
+    console.log(req.body);
+    let {
+      busid,
+      amount,
+      date,
+    } = req.body;
+    const bus = await Bus.findOne({ "id":busid });
+    console.log(bus);
+    const newCollection = new Collection({
+      busid,
+      name:bus.name,
+      ownerid: bus.ownerid,
+      amount,
+      date,
+    });
 
-        const savedReview = await review.save();
-        console.log(savedReview);
-        res.status(201).json({ success: true, store: store });
-    } catch (err) {
-        res.status(409).json({ error: err.message });
-    }
+    const store = await newCollection.save();
+    console.log(store);
+
+    res.status(201).json({ success: true, store: store });
+  } catch (err) {
+    console.log(err);
+    res.status(409).json({ error: err.message });
+  }
 };
 
-
+export const allownerbus = async (req, res) => {
+  try {
+    const { ownerId } = req.params;
+    // // // //console.log(ownerId);
+    const stores = await Bus.find({ "ownerid": ownerId }).select('-createdAt').select('-__v').select('-updatedAt');
+    // // // //console.log(stores);;
+    // // // //console.log(stores);;
+    // // // //console.log(stores);
+    stores.forEach(element => {
+      // // // //console.log(element);
+      element.busid = element._id;
+    });
+    // // // //console.log(stores);
+    res.status(201).json(stores);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
 
 export const allbus = async (req, res) => {
-    try {
-        const { ownerId } = req.params;
-        // // // //console.log(ownerId);
-        const stores = await Store.find({ id: ownerId }).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-followerscount').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
-        // // // //console.log(stores);;
-        // // // //console.log(stores);;
-        // // // //console.log(stores);
-        stores.forEach(element => {
-            // // // //console.log(element);
-            element.type = element._id;
-        });
-        // // // //console.log(stores);
-        res.status(201).json(stores);
-    } catch (err) {
-        res.status(404).json({ message: err.message });
-    }
+  try {
+    const stores = await Bus.find({}).select('-createdAt').select('-__v').select('-updatedAt');
+
+    stores.forEach(element => {
+      element.busid = element._id;
+    });
+    res.status(201).json(stores);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
 };
 
 export const allcollection = async (req, res) => {
-    try {
-        const { ownerId } = req.params;
-        // // // //console.log(ownerId);
-        const stores = await Store.find({ id: ownerId }).select('-createdAt').select('-__v').select('-updatedAt').select('-followerslist').select('-followerscount').select('-pincode').select('-longitude').select('-latitude').select('-bookedtimes');
-        // // // //console.log(stores);;
-        // // // //console.log(stores);;
-        // // // //console.log(stores);
-        stores.forEach(element => {
-            // // // //console.log(element);
-            element.type = element._id;
-        });
-        // // // //console.log(stores);
-        res.status(201).json(stores);
-    } catch (err) {
-        res.status(404).json({ message: err.message });
-    }
+  try {
+    const { ownerId } = req.params;
+    const stores = await Collection.find({ "ownerid": ownerId }).select('-createdAt').select('-__v').select('-updatedAt');
+    stores.forEach(element => {
+      element.cid = element._id;
+    });
+    console.log(stores);
+    res.status(201).json(stores);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+// DELETE SERVICES
+
+export const delBus = async (req, res) => {
+  console.log(' called');
+  try {
+      const { id } = req.params;
+      console.log(id);
+      Bus.deleteOne({ _id: id },
+          function (err, data) {
+              if (err) {
+                  res.status(201).json({ status: false, err: err });
+              }
+              else {
+                  res.status(201).json({ status: true, data: data });
+              }
+          });
+  } catch (err) {
+      console.log(err);
+      res.status(404).json({ message: err.message });
+  }
 };
