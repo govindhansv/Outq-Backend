@@ -86,6 +86,9 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+})
 // httpServer.listen(3000);
 // io.listen(3000);
 
@@ -156,7 +159,7 @@ app.use("/test/api", testRoutes);
 }
 
 /* MONGOOSE SETUP */
-const PORT = process.env.PORT || 6001;
+const PORT = process.env.PORT || 3000;
 
 mongoose.set('strictQuery', true)
 mongoose
