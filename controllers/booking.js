@@ -28,10 +28,12 @@ export const booking = async (req, res) => {
 
     // FINDING COUNTS
 
-    //console.log(req.body);
-    //console.log("storeid\n", storeid);
+    console.log(req.body);
+    console.log("serviceid\n", serviceid);
+
     let service = await Service.findOne({ _id: serviceid });
-    //console.log(service);
+
+    console.log(service);
 
     let store = await Store.findOne({ _id: storeid });
     if (store.working == "off") {
